@@ -95,6 +95,7 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.convert_txt_to_lst_exclusion(txt)
 
     def convert_txt_to_lst_exclusion(self, txt):
+        "converti le texte en liste"
         # self.lst_exclusion = api.txt_to_lst(self.fichier)
         self.lst_exclusion = api.txt_to_lst(txt)
         self.lw_liste_exclusion.clear()

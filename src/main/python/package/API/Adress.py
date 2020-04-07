@@ -8,15 +8,39 @@ from pathlib import Path
 from datetime import datetime
 from pprint import pprint
 
-if sys.platform == 'win32':
-    ADRESS_DIR = f'D{os.path.join(Path.home(), "adress")[1:]}'
-else:
-    ADRESS_DIR = os.path.join(Path.home(), "adress")
-
-
-FILE_NAME = 'lst_ref.json'
-
 logging.basicConfig(level=logging.DEBUG)
+
+
+path_appli = os.path.dirname(__file__)
+
+if os.path.exists('setup.json'):
+    logging.info("le fichier de conf existe")
+    with open('setup.json','r') as f:
+        setup_file = json.load(f)
+
+
+
+else:
+    setup_file = {}
+    setup_file["ADRESS_DIR"] = 'adress'
+    setup_file["FILE_NAME"] = 'lst_ref.json'
+
+    print(setup_file)
+
+    with open('setup.json', 'w') as f:
+        json.dump(setup_file, f, indent=4)
+        logging.info('création du fichier de setup')
+
+
+
+if sys.platform == 'win32':
+    ADRESS_DIR = f'D{os.path.join(Path.home(), setup_file["ADRESS_DIR"])[1:]}'
+else:
+    ADRESS_DIR = os.path.join(Path.home(), setup_file["ADRESS_DIR"])
+
+FILE_NAME = setup_file["FILE_NAME"]
+
+
 
 
 def txt_to_lst(text=""):
