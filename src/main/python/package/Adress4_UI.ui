@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>645</width>
+    <height>534</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Gestion d'exclusion</string>
+  </property>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>6</x>
+     <y>8</y>
+     <width>631</width>
+     <height>511</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="8" column="0">
+     <widget class="QLabel" name="lbl_ref_count">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="2">
+     <widget class="QLabel" name="lbl_exclusion_count">
+      <property name="text">
+       <string/>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0">
+     <widget class="QPushButton" name="btn_open_ref">
+      <property name="text">
+       <string>Importer Nouvelle Ref </string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2">
+     <widget class="QPushButton" name="btn_open_exclusion">
+      <property name="text">
+       <string>Importer Nouvelle Exclusion</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="btn_convert_ref">
+      <property name="text">
+       <string>Sauvegarder</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QPushButton" name="btn_convert_exclusion">
+      <property name="text">
+       <string>Sauvegarder</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0">
+     <widget class="QComboBox" name="cb_import_json">
+      <property name="editable">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QPushButton" name="btn_import_exclusion">
+      <property name="text">
+       <string>Importer Exclusion</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QPushButton" name="btn_text_ref">
+      <property name="text">
+       <string>Convertir Texte</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="2">
+     <widget class="QPushButton" name="btn_text_exclusion">
+      <property name="text">
+       <string>Convertir Texte</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0" colspan="3">
+     <widget class="QTextEdit" name="pt_texte_brut">
+      <property name="placeholderText">
+       <string>glissez deposez ou collez le texte à convertir ici</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="0" rowspan="2">
+     <widget class="QListWidget" name="lw_liste_ref"/>
+    </item>
+    <item row="6" column="1">
+     <widget class="QPushButton" name="btn_include">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>&lt;-</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="2" rowspan="2">
+     <widget class="QListWidget" name="lw_liste_exclusion"/>
+    </item>
+    <item row="7" column="1">
+     <widget class="QPushButton" name="btn_exclude">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="text">
+       <string>-&gt;</string>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="0" colspan="3">
+     <widget class="QPushButton" name="btn_generate_list">
+      <property name="text">
+       <string>Generer Liste</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="2">
+     <widget class="QLineEdit" name="le_adress_exclusion"/>
+    </item>
+    <item row="5" column="0">
+     <widget class="QLineEdit" name="le_adress_ref">
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+      <property name="placeholderText">
+       <string>recherche</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

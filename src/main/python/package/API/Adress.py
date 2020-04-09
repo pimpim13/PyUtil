@@ -41,8 +41,6 @@ else:
 FILE_NAME = setup_file["FILE_NAME"]
 
 
-
-
 def txt_to_lst(text=""):
 
         lst = text.split(';')
@@ -60,6 +58,8 @@ def txt_to_lst(text=""):
 
 
 def write_to_disk(path, lst):
+    """ Fonction qui écrit à l'adresse path le fichier texte passé en parametre
+    """
     p = os.path.dirname(path)
     b = os.path.basename(path)
     t = os.path.splitext(b)
@@ -93,12 +93,6 @@ def process(lst_origine, lst_exclusion):
     return lst
 
 
-# def get_file_to_list(path):
-#     with open(path, 'r') as f:
-#         txt = f.read().lower()
-#         lst = txt.split()
-#         return lst
-
 
 def list_ecart(lst1, lst2):
     """ Retourne les éléments qui ne figurent que dans 1 seule des 2 listes passées en paramètre"""
@@ -122,19 +116,25 @@ def save_json(lst, nom_fichier='sans_nom'):
     else:
         path = os.path.join(ADRESS_DIR, nom_fichier)
 
+    path = os.path.join(ADRESS_DIR, FILE_NAME)
+    with open(path,'r') as f:
+        all_list = json.load(f)
+        print(type(all_list))
+        print(all_list)
 
-    # path = os.path.join(ADRESS_DIR, FILE_NAME)
+    all_list[nom_fichier] = lst
 
-    data = {nom_fichier: lst}
+
+    # data = {nom_fichier: lst}
     with open(path, "w") as f:
-        json.dump(data, f, indent=4)
+        json.dump(all_list, f, indent=4)
         logging.info(f'Enregistrement du fichier {path}')
 
 
-def get_lst_from_json(path, nom_liste='lst_ref'):
+def get_lst_from_json(nom_liste='lst_ref'):
     """Récupère le liste de clef nom_liste dans le fichier Json indiqué dans le paramètre path"""
 
-
+    path = os.path.join(ADRESS_DIR, FILE_NAME)
     if not os.path.exists(path):
         logging.error(f"Le fichier {path} n'existe pas ")
         return
@@ -146,28 +146,42 @@ def get_lst_from_json(path, nom_liste='lst_ref'):
 
 
 def get_lst_of_json(path):
-    """récupère la liste des fichiers json
-    *** cette fonction doit etre modifiée pour ne récupérer que
-     la liste des clefs du fichier json de reference ***
+    """cette fonction récupére la liste des clefs du fichier json de reference
     """
+    path = os.path.join(ADRESS_DIR, FILE_NAME)
+    with open(path,'r') as f:
+        all_list = json.load(f)
+        # print(path)
 
-    lst_json = glob(f"{path}/*.json")
-    return lst_json
+    return all_list.keys()
 
 
 if __name__ == '__main__':
 
+    # test_json = {"toto": [1,2,3], "bibi": [4, 5, 6]}
+    # with open("/Users/alainzypinoglou/adress/test_json.json",'w') as f:
+    #     json.dump(test_json, f,indent=4)
+    #
+    # with open("/Users/alainzypinoglou/adress/test_json.json",'r') as f:
+    #     all_list = f.read()
+    #     print(type(all_list))
+    #     print(all_list)
+    #     dictio = all_list.split()
+    #     print(dictio)
 
-    ADRESS_DIR = '/Users/alainzypinoglou/adress'
-    lst1 = [1, 2, 3, 4, 5]
-    lst2 = [1, 2, 6, 7, 8]
-    save_json(lst1, "toto")
+    # import json
 
-    # path = '/Users/alainzypinoglou/adress/'
-    # lst = get_lst_of_json(path=path)
-    # print(lst)
+    dict = {"member #002": {"first name": "John", "last name": "Doe", "age": 34},
+            "member #003": {"first name": "Elijah", "last name": "Baley", "age": 27},
+            "member #001": {"first name": "Jane", "last name": "Doe", "age": 42}}
 
+    with open('/Users/alainzypinoglou/adress/test_json.json', 'w') as fp:
+        json.dump(dict, fp, sort_keys=True, indent=4)
 
+    with open("/Users/alainzypinoglou/adress/test_json.json",'r') as f:
+        all_list = json.load(f)
+        print(type(all_list))
+        print(all_list)
 
 
 

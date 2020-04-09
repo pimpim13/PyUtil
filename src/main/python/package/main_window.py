@@ -33,6 +33,9 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.btn_convert_ref.setEnabled(False)
         self.btn_text_ref.setEnabled(False)
         self.btn_text_exclusion.setEnabled(False)
+        self.pt_texte_brut.setMaximumHeight(50)
+        self.lw_liste_ref.setMinimumHeight(200)
+        self.lw_liste_exclusion.setMinimumHeight(200)
 
     def setup_connections(self):
         self.btn_open_ref.clicked.connect(self.init_list)
@@ -47,6 +50,33 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.btn_text_ref.clicked.connect(self.convert_text)
         self.btn_text_exclusion.clicked.connect(self.convert_text_exclusion)
 
+    def populate_widgets(self):
+        self.populate_ref()
+        self.populate_exclude()
+        self.populate_cb_json()
+
+    def populate_ref(self):
+        self.lst_ref = api.get_lst_from_json(nom_liste='lst_ref')
+        if self.lst_ref:
+            self.lw_liste_ref.addItems(self.lst_ref)
+            self.lw_liste_ref.repaint()
+            self.lbl_ref_count.setText(str(len(self.lst_ref)))
+
+    def populate_exclude(self):
+        self.lst_exclusion = api.get_lst_from_json(nom_liste='lst_exclusion')
+        if self.lst_exclusion:
+            self.lw_liste_exclusion.addItems(self.lst_exclusion)
+            self.lw_liste_exclusion.repaint()
+            # self.filename_exclusion = path
+            self.lbl_exclusion_count.setText(str(len(self.lst_exclusion)))
+        return
+
+    def populate_cb_json(self):
+        lst_json = api.get_lst_of_json(api.ADRESS_DIR)
+        self.cb_import_json.addItem("")
+        for key in lst_json:
+            self.cb_import_json.addItem(key)
+
     def open_file(self):
         file_dialog = QtWidgets.QFileDialog(self)
         file_dialog.setMimeTypeFilters(["text/plain"])
@@ -58,6 +88,9 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
             return adress
 
     def init_list(self):
+        """ ouvre un fichier texte contenant les adresses email au format outlook et appelle la fonction de convertion
+        en liste"""
+
         self.fichier_ref = self.open_file()
         if self.fichier_ref:
             self.filename_ref = os.path.basename(self.fichier_ref[:-4])
@@ -70,6 +103,7 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.convert_to_list(txt)
 
     def convert_to_list(self, txt):
+        """ appelle la fonction de convertion de texte en liste et affiche la liste dans le widget lw_liste_ref"""
         # self.lst_ref = api.txt_to_lst(self.fichier_ref)
         self.lst_ref = api.txt_to_lst(txt)
         self.lw_liste_ref.clear()
@@ -200,38 +234,7 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
             message_box.exec_()
         return result
 
-    def populate_widgets(self):
 
-        self.populate_ref()
-        self.populate_exclude()
-        self.populate_cb_json()
-        return
-
-    def populate_ref(self):
-        path = os.path.join(api.ADRESS_DIR, 'lst_ref.json')
-        self.lst_ref = api.get_lst_from_json(path=path, nom_liste='lst_ref')
-        if self.lst_ref:
-            # for item in self.lst_ref:
-            #     self.lw_liste_ref.addItem(item)
-            self.lw_liste_ref.addItems(self.lst_ref)
-            self.lw_liste_ref.repaint()
-            self.lbl_ref_count.setText(str(len(self.lst_ref)))
-
-    def populate_exclude(self):
-        path = os.path.join(api.ADRESS_DIR, 'lst_exclusion.json')
-        self.lst_exclusion = api.get_lst_from_json(path=path, nom_liste='lst_exclusion')
-        if self.lst_exclusion:
-            self.lw_liste_exclusion.addItems(self.lst_exclusion)
-            self.lw_liste_exclusion.repaint()
-            self.filename_exclusion = path
-            self.lbl_exclusion_count.setText(str(len(self.lst_exclusion)))
-        return
-
-    def populate_cb_json(self):
-        lst_json = api.get_lst_of_json(api.ADRESS_DIR)
-        lst = [os.path.basename(item)[:-5] for item in lst_json]
-        lst.insert(0, "")
-        self.cb_import_json.addItems(lst)
 
     def load_json(self):
         """ à voir si on conserve """
