@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file '/Users/alainzypinoglou/PycharmProjects/PyUtil/src/main/python/package/Adress4_UI.ui',
 # licensing of '/Users/alainzypinoglou/PycharmProjects/PyUtil/src/main/python/package/Adress4_UI.ui' applies.
 #
-# Created: Tue Mar 24 11:51:21 2020
+# Created: Fri Apr 10 14:14:21 2020
 #      by: pyside2-uic  running on PySide2 5.13.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -21,11 +21,13 @@ class Ui_Form(object):
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setObjectName("gridLayout")
         self.lbl_ref_count = QtWidgets.QLabel(self.layoutWidget)
+        self.lbl_ref_count.setFrameShape(QtWidgets.QFrame.Box)
         self.lbl_ref_count.setText("")
         self.lbl_ref_count.setAlignment(QtCore.Qt.AlignCenter)
         self.lbl_ref_count.setObjectName("lbl_ref_count")
         self.gridLayout.addWidget(self.lbl_ref_count, 8, 0, 1, 1)
         self.lbl_exclusion_count = QtWidgets.QLabel(self.layoutWidget)
+        self.lbl_exclusion_count.setFrameShape(QtWidgets.QFrame.Box)
         self.lbl_exclusion_count.setText("")
         self.lbl_exclusion_count.setAlignment(QtCore.Qt.AlignCenter)
         self.lbl_exclusion_count.setObjectName("lbl_exclusion_count")
@@ -56,9 +58,13 @@ class Ui_Form(object):
         self.btn_text_exclusion.setObjectName("btn_text_exclusion")
         self.gridLayout.addWidget(self.btn_text_exclusion, 3, 2, 1, 1)
         self.pt_texte_brut = QtWidgets.QTextEdit(self.layoutWidget)
+        self.pt_texte_brut.setMaximumSize(QtCore.QSize(16777215, 50))
+        self.pt_texte_brut.setBaseSize(QtCore.QSize(0, 0))
         self.pt_texte_brut.setObjectName("pt_texte_brut")
         self.gridLayout.addWidget(self.pt_texte_brut, 4, 0, 1, 3)
         self.lw_liste_ref = QtWidgets.QListWidget(self.layoutWidget)
+        self.lw_liste_ref.setMinimumSize(QtCore.QSize(0, 200))
+        self.lw_liste_ref.setBaseSize(QtCore.QSize(0, 0))
         self.lw_liste_ref.setObjectName("lw_liste_ref")
         self.gridLayout.addWidget(self.lw_liste_ref, 6, 0, 2, 1)
         self.btn_include = QtWidgets.QPushButton(self.layoutWidget)
@@ -77,15 +83,14 @@ class Ui_Form(object):
         self.btn_generate_list.setObjectName("btn_generate_list")
         self.gridLayout.addWidget(self.btn_generate_list, 9, 0, 1, 3)
         self.le_adress_exclusion = QtWidgets.QLineEdit(self.layoutWidget)
+        self.le_adress_exclusion.setEnabled(False)
         self.le_adress_exclusion.setObjectName("le_adress_exclusion")
         self.gridLayout.addWidget(self.le_adress_exclusion, 5, 2, 1, 1)
         self.le_adress_ref = QtWidgets.QLineEdit(self.layoutWidget)
+        self.le_adress_ref.setEnabled(False)
         self.le_adress_ref.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.le_adress_ref.setObjectName("le_adress_ref")
         self.gridLayout.addWidget(self.le_adress_ref, 5, 0, 1, 1)
-        self.btn_add_adress = QtWidgets.QPushButton(self.layoutWidget)
-        self.btn_add_adress.setObjectName("btn_add_adress")
-        self.gridLayout.addWidget(self.btn_add_adress, 5, 1, 1, 1)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -103,5 +108,5 @@ class Ui_Form(object):
         self.btn_include.setText(QtWidgets.QApplication.translate("Form", "<-", None, -1))
         self.btn_exclude.setText(QtWidgets.QApplication.translate("Form", "->", None, -1))
         self.btn_generate_list.setText(QtWidgets.QApplication.translate("Form", "Generer Liste", None, -1))
-        self.btn_add_adress.setText(QtWidgets.QApplication.translate("Form", "+", None, -1))
+        self.le_adress_ref.setPlaceholderText(QtWidgets.QApplication.translate("Form", "recherche", None, -1))
 
