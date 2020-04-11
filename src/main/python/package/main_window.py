@@ -19,6 +19,7 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.setup_connections()
 
         self.populate_widgets()
+        # self.recherche = True
 
     def modify_widgets(self):
 
@@ -36,12 +37,13 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.pt_texte_brut.setMaximumHeight(50)
         self.lw_liste_ref.setMinimumHeight(200)
         self.lw_liste_exclusion.setMinimumHeight(200)
+        self.le_adress_ref.setEnabled(True)
 
     def setup_connections(self):
         self.btn_open_ref.clicked.connect(self.init_list)
         self.btn_open_exclusion.clicked.connect(self.init_list_exclusion)
         self.btn_convert_ref.clicked.connect(self.save_ref_to_json)
-        self.btn_convert_exclusion.clicked.connect(self.save_exclusion_to_json)
+        # self.btn_convert_exclusion.clicked.connect(self.save_exclusion_to_json)
         self.btn_exclude.clicked.connect(self.exclude_from_ref)
         self.btn_include.clicked.connect(self.exclude_from_exclusion)
         self.btn_generate_list.clicked.connect(self.generate_list)
@@ -49,6 +51,7 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.pt_texte_brut.textChanged.connect(self.enable_text)
         self.btn_text_ref.clicked.connect(self.convert_text)
         self.btn_text_exclusion.clicked.connect(self.convert_text_exclusion)
+        self.le_adress_ref.textChanged.connect(self.search_ref)
 
     def populate_widgets(self):
         self.populate_ref()
@@ -274,3 +277,13 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.pt_texte_brut.clear()
         self.btn_text_exclusion.setEnabled(False)
         self.btn_text_ref.setEnabled(False)
+
+    def search_ref(self):
+        self.lw_liste_ref.clear()
+        self.populate_ref()
+
+        items = self.lw_liste_ref.findItems(self.le_adress_ref.text(), QtCore.Qt.MatchContains)
+
+        lst = [item.text() for item in items]
+        self.lw_liste_ref.clear()
+        self.lw_liste_ref.addItems(lst)
