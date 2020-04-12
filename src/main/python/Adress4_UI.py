@@ -3,7 +3,7 @@
 # Form implementation generated from reading ui file '/Users/alainzypinoglou/PycharmProjects/PyUtil/src/main/python/package/Adress4_UI.ui',
 # licensing of '/Users/alainzypinoglou/PycharmProjects/PyUtil/src/main/python/package/Adress4_UI.ui' applies.
 #
-# Created: Fri Apr 10 14:12:44 2020
+# Created: Sun Apr 12 11:23:15 2020
 #      by: pyside2-uic  running on PySide2 5.13.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -21,12 +21,18 @@ class Ui_Form(object):
         self.gridLayout.setContentsMargins(0, 0, 0, 0)
         self.gridLayout.setObjectName("gridLayout")
         self.lbl_ref_count = QtWidgets.QLabel(self.layoutWidget)
+        font = QtGui.QFont()
+        font.setWeight(50)
+        font.setBold(False)
+        self.lbl_ref_count.setFont(font)
+        self.lbl_ref_count.setStyleSheet("background-color: rgb(155, 255, 143);")
         self.lbl_ref_count.setFrameShape(QtWidgets.QFrame.Box)
         self.lbl_ref_count.setText("")
         self.lbl_ref_count.setAlignment(QtCore.Qt.AlignCenter)
         self.lbl_ref_count.setObjectName("lbl_ref_count")
         self.gridLayout.addWidget(self.lbl_ref_count, 8, 0, 1, 1)
         self.lbl_exclusion_count = QtWidgets.QLabel(self.layoutWidget)
+        self.lbl_exclusion_count.setStyleSheet("background-color: rgba(255, 95, 79, 135);")
         self.lbl_exclusion_count.setFrameShape(QtWidgets.QFrame.Box)
         self.lbl_exclusion_count.setText("")
         self.lbl_exclusion_count.setAlignment(QtCore.Qt.AlignCenter)
@@ -42,15 +48,13 @@ class Ui_Form(object):
         self.btn_convert_ref.setObjectName("btn_convert_ref")
         self.gridLayout.addWidget(self.btn_convert_ref, 1, 0, 1, 1)
         self.btn_convert_exclusion = QtWidgets.QPushButton(self.layoutWidget)
+        self.btn_convert_exclusion.setEnabled(False)
         self.btn_convert_exclusion.setObjectName("btn_convert_exclusion")
         self.gridLayout.addWidget(self.btn_convert_exclusion, 1, 2, 1, 1)
         self.cb_import_json = QtWidgets.QComboBox(self.layoutWidget)
         self.cb_import_json.setEditable(False)
         self.cb_import_json.setObjectName("cb_import_json")
         self.gridLayout.addWidget(self.cb_import_json, 2, 0, 1, 1)
-        self.btn_import_exclusion = QtWidgets.QPushButton(self.layoutWidget)
-        self.btn_import_exclusion.setObjectName("btn_import_exclusion")
-        self.gridLayout.addWidget(self.btn_import_exclusion, 2, 2, 1, 1)
         self.btn_text_ref = QtWidgets.QPushButton(self.layoutWidget)
         self.btn_text_ref.setObjectName("btn_text_ref")
         self.gridLayout.addWidget(self.btn_text_ref, 3, 0, 1, 1)
@@ -91,6 +95,9 @@ class Ui_Form(object):
         self.le_adress_ref.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.le_adress_ref.setObjectName("le_adress_ref")
         self.gridLayout.addWidget(self.le_adress_ref, 5, 0, 1, 1)
+        self.cd_import_json_exclusion = QtWidgets.QComboBox(self.layoutWidget)
+        self.cd_import_json_exclusion.setObjectName("cd_import_json_exclusion")
+        self.gridLayout.addWidget(self.cd_import_json_exclusion, 2, 2, 1, 1)
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -101,12 +108,12 @@ class Ui_Form(object):
         self.btn_open_exclusion.setText(QtWidgets.QApplication.translate("Form", "Importer Nouvelle Exclusion", None, -1))
         self.btn_convert_ref.setText(QtWidgets.QApplication.translate("Form", "Sauvegarder", None, -1))
         self.btn_convert_exclusion.setText(QtWidgets.QApplication.translate("Form", "Sauvegarder", None, -1))
-        self.btn_import_exclusion.setText(QtWidgets.QApplication.translate("Form", "Importer Exclusion", None, -1))
         self.btn_text_ref.setText(QtWidgets.QApplication.translate("Form", "Convertir Texte", None, -1))
         self.btn_text_exclusion.setText(QtWidgets.QApplication.translate("Form", "Convertir Texte", None, -1))
         self.pt_texte_brut.setPlaceholderText(QtWidgets.QApplication.translate("Form", "glissez deposez ou collez le texte à convertir ici", None, -1))
         self.btn_include.setText(QtWidgets.QApplication.translate("Form", "<-", None, -1))
         self.btn_exclude.setText(QtWidgets.QApplication.translate("Form", "->", None, -1))
         self.btn_generate_list.setText(QtWidgets.QApplication.translate("Form", "Generer Liste", None, -1))
-        self.le_adress_ref.setPlaceholderText(QtWidgets.QApplication.translate("Form", "recherche", None, -1))
+        self.le_adress_exclusion.setPlaceholderText(QtWidgets.QApplication.translate("Form", "Recherche", None, -1))
+        self.le_adress_ref.setPlaceholderText(QtWidgets.QApplication.translate("Form", "Recherche", None, -1))
 

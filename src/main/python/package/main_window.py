@@ -29,8 +29,13 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.lw_liste_exclusion.setSortingEnabled(True)
         self.setAcceptDrops(True)
         self.btn_convert_ref.setEnabled(False)
+        self.btn_convert_exclusion.setEnabled(False)
+        self.btn_convert_ref.hide()
+        self.btn_convert_exclusion.hide()
         self.btn_text_ref.setEnabled(False)
+        self.btn_text_ref.hide()
         self.btn_text_exclusion.setEnabled(False)
+        self.btn_text_exclusion.hide()
         self.pt_texte_brut.setMaximumHeight(50)
         self.lw_liste_ref.setMinimumHeight(200)
         self.lw_liste_exclusion.setMinimumHeight(200)
@@ -38,6 +43,9 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.le_adress_ref.setPlaceholderText("Recherche")
         self.le_adress_exclusion.setEnabled(True)
         self.le_adress_ref.setEnabled(True)
+        self.lbl_ref_count.setMaximumHeight(30)
+        self.btn_generate_list.setMinimumHeight(50)
+        # self.cd_import_json_exclusion.setEnabled(True)
 
     def setup_connections(self):
         self.btn_open_ref.clicked.connect(self.init_list)
@@ -48,6 +56,7 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.btn_include.clicked.connect(self.exclude_from_exclusion)
         self.btn_generate_list.clicked.connect(self.generate_list)
         self.cb_import_json.currentIndexChanged.connect(self.load_json)
+        self.cd_import_json_exclusion.currentIndexChanged.connect(self.load_json)
         self.pt_texte_brut.textChanged.connect(self.enable_text)
         self.btn_text_ref.clicked.connect(self.convert_text)
         self.btn_text_exclusion.clicked.connect(self.convert_text_exclusion)
@@ -78,8 +87,10 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
     def populate_cb_json(self):
         lst_json = api.get_lst_of_json(api.ADRESS_DIR)
         self.cb_import_json.addItem("")
+        self.cd_import_json_exclusion.addItem("")
         for key in lst_json:
             self.cb_import_json.addItem(key)
+            self.cd_import_json_exclusion.addItem(key)
 
     def open_file(self):
         file_dialog = QtWidgets.QFileDialog(self)
