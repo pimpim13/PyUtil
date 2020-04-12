@@ -17,9 +17,7 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.fichier = ""
         self.modify_widgets()
         self.setup_connections()
-
         self.populate_widgets()
-        # self.recherche = True
 
     def modify_widgets(self):
 
@@ -30,13 +28,15 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.lw_liste_ref.setSortingEnabled(True)
         self.lw_liste_exclusion.setSortingEnabled(True)
         self.setAcceptDrops(True)
-        # self.lbl_dropinfo.setVisible(False)
         self.btn_convert_ref.setEnabled(False)
         self.btn_text_ref.setEnabled(False)
         self.btn_text_exclusion.setEnabled(False)
         self.pt_texte_brut.setMaximumHeight(50)
         self.lw_liste_ref.setMinimumHeight(200)
         self.lw_liste_exclusion.setMinimumHeight(200)
+        self.le_adress_exclusion.setPlaceholderText("Recherche")
+        self.le_adress_ref.setPlaceholderText("Recherche")
+        self.le_adress_exclusion.setEnabled(True)
         self.le_adress_ref.setEnabled(True)
 
     def setup_connections(self):
@@ -52,6 +52,7 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.btn_text_ref.clicked.connect(self.convert_text)
         self.btn_text_exclusion.clicked.connect(self.convert_text_exclusion)
         self.le_adress_ref.textChanged.connect(self.search_ref)
+        self.le_adress_exclusion.textChanged.connect(self.search_exclusion)
 
     def populate_widgets(self):
         self.populate_ref()
@@ -59,14 +60,14 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.populate_cb_json()
 
     def populate_ref(self):
-        self.lst_ref = api.get_lst_from_json(nom_liste='lst_ref')
+        self.lst_ref = api.get_lst_from_json(nom_liste='last_ref')
         if self.lst_ref:
             self.lw_liste_ref.addItems(self.lst_ref)
             self.lw_liste_ref.repaint()
             self.lbl_ref_count.setText(str(len(self.lst_ref)))
 
     def populate_exclude(self):
-        self.lst_exclusion = api.get_lst_from_json(nom_liste='lst_exclusion')
+        self.lst_exclusion = api.get_lst_from_json(nom_liste='last_exclusion')
         if self.lst_exclusion:
             self.lw_liste_exclusion.addItems(self.lst_exclusion)
             self.lw_liste_exclusion.repaint()
@@ -117,6 +118,7 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.lbl_ref_count.setText(str(len(self.lst_ref)))
 
         api.save_json(lst=self.lst_ref, nom_fichier='lst_ref')
+        api.save_json(lst=self.lst_ref, nom_fichier='last_ref')
         self.btn_convert_ref.setEnabled(True)
 
         return
@@ -143,6 +145,7 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.lbl_exclusion_count.setText(str(len(self.lst_exclusion)))
         # api.save_json(lst=self.lst_exclusion, nom_liste='lst_exclusion')
         api.save_json(lst=self.lst_exclusion, nom_fichier='lst_exclusion')
+        api.save_json(lst=self.lst_exclusion, nom_fichier='last_exclusion')
         return
 
     def save_ref_to_json(self):
@@ -177,10 +180,13 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
                 self.lst_ref.remove(selected_item.text())
                 self.lbl_ref_count.setText(str(len(self.lst_ref)))
                 api.save_json(lst=self.lst_ref, nom_fichier='lst_ref')
+                api.save_json(lst=self.lst_ref, nom_fichier='last_ref')
+
                 if selected_item.text() not in self.lst_exclusion:
                     self.lst_exclusion.append(selected_item.text())
                     self.lbl_exclusion_count.setText(str(len(self.lst_exclusion)))
                     api.save_json(lst=self.lst_exclusion, nom_fichier='lst_exclusion')
+                    api.save_json(lst=self.lst_exclusion, nom_fichier='last_exclusion')
                 else:
                     self.flag = True
 
@@ -195,10 +201,12 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
                 self.lst_exclusion.remove(selected_item.text())
                 self.lbl_exclusion_count.setText(str(len(self.lst_exclusion)))
                 api.save_json(lst=self.lst_exclusion, nom_fichier='lst_exclusion')
+                api.save_json(lst=self.lst_exclusion, nom_fichier='last_exclusion')
                 if selected_item.text() not in self.lst_ref:
                     self.lst_ref.append(selected_item.text())
                     self.lbl_ref_count.setText(str(len(self.lst_ref)))
-                    api.save_json(lst=self.lst_ref, nom_fichier='lst_exclusion')
+                    api.save_json(lst=self.lst_ref, nom_fichier='lst_ref')
+                    api.save_json(lst=self.lst_ref, nom_fichier='last_ref')
                 else:
                     self.flag = True
 
@@ -207,7 +215,7 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.delete_selected_ref()
         self.lw_liste_ref.repaint()
         if not self.flag_ref:
-            if not self.lw_liste_exclusion.findItems(self.lst_exclusion[-1], QtCore.Qt.MatchExactly ):
+            if not self.lw_liste_exclusion.findItems(self.lst_exclusion[-1], QtCore.Qt.MatchExactly):
                 self.lw_liste_exclusion.addItem(self.lst_exclusion[-1])
                 self.lw_liste_exclusion.repaint()
             else:
@@ -287,3 +295,14 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         lst = [item.text() for item in items]
         self.lw_liste_ref.clear()
         self.lw_liste_ref.addItems(lst)
+
+    def search_exclusion(self):
+        self.lw_liste_exclusion.clear()
+        self.populate_exclude()
+
+        items = self.lw_liste_exclusion.findItems(self.le_adress_exclusion.text(), QtCore.Qt.MatchContains)
+
+        lst = [item.text() for item in items]
+        self.lw_liste_exclusion.clear()
+        self.lw_liste_exclusion.addItems(lst)
+

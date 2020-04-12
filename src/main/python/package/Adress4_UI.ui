@@ -72,6 +72,9 @@
     </item>
     <item row="1" column="2">
      <widget class="QPushButton" name="btn_convert_exclusion">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="text">
        <string>Sauvegarder</string>
       </property>
@@ -86,6 +89,9 @@
     </item>
     <item row="2" column="2">
      <widget class="QPushButton" name="btn_import_exclusion">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="text">
        <string>Importer Exclusion</string>
       </property>
@@ -183,6 +189,9 @@
      <widget class="QLineEdit" name="le_adress_exclusion">
       <property name="enabled">
        <bool>false</bool>
+      </property>
+      <property name="placeholderText">
+       <string>Recherche</string>
       </property>
      </widget>
     </item>

@@ -119,10 +119,9 @@ def save_json(lst, nom_fichier='sans_nom'):
     path = os.path.join(ADRESS_DIR, FILE_NAME)
     with open(path,'r') as f:
         all_list = json.load(f)
-        print(type(all_list))
-        print(all_list)
 
     all_list[nom_fichier] = lst
+
 
 
     # data = {nom_fichier: lst}
