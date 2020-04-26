@@ -3,7 +3,7 @@ QDialog {
 }
 
 QWidget {
-	background-color: #232323;
+	background-color: #333333;
 }
 
 QLabel {
@@ -57,7 +57,7 @@ QScrollBar:horizontal {
 }
 
 QScrollBar::handle:horizontal {
-	background: #47A6E5;
+	background: #333333;
 	min-height: 0px;
 	border-radius: 7px;
 }
@@ -155,7 +155,7 @@ QPushButton[checkboxBtn=true] {
 	background-color: transparent;
 	border: none;
 	font-size: 14px;
-	color: #fafafa;
+	color: #444444;
 }
 
 QPushButton[checkboxBtn=true]::hover {
@@ -165,10 +165,10 @@ QPushButton[checkboxBtn=true]::hover {
 }
 
 QPushButton {
-    background-color: #33CC99;
-    color: rgb(30, 30, 30);
+    background-color: #444444;
+    color: rgb(200, 200, 200);
     border: 0px solid rgb(75, 75, 75);
-    border-radius: 6px;
+    border-radius: 0px;
     font-size: 16px;
     padding: 0px 8px 0px 8px;
     min-height: 22px;
@@ -261,7 +261,7 @@ QListView {
 
 QListView::item {
 	border: 0px;
-	color: #fafafa;
+	color: #AAAAAA;
 }
 
 QListView::item:selected {
@@ -314,8 +314,8 @@ QSlider::groove:horizontal {
 }
 
 QSlider::sub-page:horizontal {
-	background: rgb(165, 203, 239);
-	border-radius: 4px;
+	background: rgb(256, 256, 256);
+	border-radius: 2px;
 }
 
 QSlider::handle:horizontal {

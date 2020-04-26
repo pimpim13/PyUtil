@@ -1,5 +1,5 @@
 {
-    "app_name": "Adress",
+    "app_name": "PyUtil",
     "author": "Alainzypinoglou",
     "main_module": "src/main/python/main.py",
     "version": "0.0.0"

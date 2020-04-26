@@ -1,9 +1,10 @@
-from PySide2 import QtWidgets, QtCore, QtGui
+from PySide2 import QtWidgets, QtCore
 import package.API.Adress as api
 from Adress4_UI import Ui_Form
 import os
 import re
 import logging
+from datetime import  datetime
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -18,6 +19,8 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.modify_widgets()
         self.setup_connections()
         self.populate_widgets()
+        self.nomfichier = ""
+        self.fichier_ref = ""
 
     def modify_widgets(self):
 
@@ -28,14 +31,14 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.lw_liste_ref.setSortingEnabled(True)
         self.lw_liste_exclusion.setSortingEnabled(True)
         self.setAcceptDrops(True)
-        self.btn_convert_ref.setEnabled(False)
-        self.btn_convert_exclusion.setEnabled(False)
+        self.btn_convert_ref.setEnabled(True)
+        self.btn_convert_exclusion.setEnabled(True)
         self.btn_convert_ref.hide()
         self.btn_convert_exclusion.hide()
         self.btn_text_ref.setEnabled(False)
-        self.btn_text_ref.hide()
+        # self.btn_text_ref.hide()
         self.btn_text_exclusion.setEnabled(False)
-        self.btn_text_exclusion.hide()
+        # self.btn_text_exclusion.hide()
         self.pt_texte_brut.setMaximumHeight(50)
         self.lw_liste_ref.setMinimumHeight(200)
         self.lw_liste_exclusion.setMinimumHeight(200)
@@ -46,6 +49,10 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.lbl_ref_count.setMaximumHeight(30)
         self.btn_generate_list.setMinimumHeight(50)
         # self.cd_import_json_exclusion.setEnabled(True)
+
+        self.pt_texte_brut.setHtml('<h2> Bonjour </h2>')
+
+
 
     def setup_connections(self):
         self.btn_open_ref.clicked.connect(self.init_list)
@@ -98,6 +105,7 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         # adress_dir = QtCore.QStandardPaths.writableLocation(QtCore.QStandardPaths.HomeLocation)
         adress_dir = api.ADRESS_DIR
         file_dialog.setDirectory(adress_dir)
+
         if file_dialog.exec_() == QtWidgets.QDialog.Accepted:
             adress = file_dialog.selectedFiles()[0]
             return adress
@@ -247,11 +255,23 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
 
         lst_filtre = api.process(lst_origine=self.lst_ref, lst_exclusion=self.lst_exclusion)
         lst_filtre.sort()
-        result = api.write_to_disk(path=os.path.join(api.ADRESS_DIR, 'lst_ref_filtre'), lst=lst_filtre)
+
+        if self.fichier_ref:
+            nom_fichier_filtre = f"{os.path.splitext(self.fichier_ref)[0]}_filtre{os.path.splitext(self.fichier_ref)[1]}"
+        else:
+            file_dialog = QtWidgets.QFileDialog(self)
+            nom_fichier_filtre = file_dialog.getSaveFileName(self)[0]
+            if not nom_fichier_filtre:
+                t = datetime.now()
+                nom_fichier_filtre = str(t.date())+"-"+str(t.time())[:-7]
+
+        print(nom_fichier_filtre)
+        result = api.write_to_disk(path=os.path.join(api.ADRESS_DIR, nom_fichier_filtre), lst=lst_filtre)
+        # result = True
         if result:
             message_box = QtWidgets.QMessageBox()
             message_box.setWindowTitle("Process")
-            message_box.setText(f"Le fichier lst_ref_filtre contenant {len(lst_filtre)} adresses a été créé dans le"
+            message_box.setText(f"Le fichier {os.path.basename(nom_fichier_filtre)} contenant {len(lst_filtre)} adresses a été créé dans le"
                                 f" dossier {api.ADRESS_DIR}" )
             message_box.exec_()
         return result
@@ -306,6 +326,7 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         lst = [item.text() for item in items]
         self.lw_liste_ref.clear()
         self.lw_liste_ref.addItems(lst)
+        self.lbl_ref_count.setText(str(len(lst)))
 
     def search_exclusion(self):
         self.lw_liste_exclusion.clear()
@@ -316,4 +337,6 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         lst = [item.text() for item in items]
         self.lw_liste_exclusion.clear()
         self.lw_liste_exclusion.addItems(lst)
+        self.lbl_exclusion_count.setText(str(len(lst)))
+
 
