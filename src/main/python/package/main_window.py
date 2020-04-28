@@ -1,4 +1,4 @@
-from PySide2 import QtWidgets, QtCore
+from PySide2 import QtWidgets, QtCore, QtGui
 import package.API.Adress as api
 from Adress4_UI import Ui_Form
 import os
@@ -89,6 +89,11 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.lbl_ref_count.setFrameShape(QtWidgets.QFrame.Box)
         # self.lbl_exclusion_count.setAlignment(QtCore.Qt.AlignHCenter)
         # self.cd_import_json_exclusion.setEnabled(True)
+        font = QtGui.QFont()
+        font.setWeight(50)
+        font.setBold(True)
+        self.lbl_ref_count.setFont(font)
+        self.lbl_exclusion_count.setFont(font)
 
         self.pt_texte_brut.setHtml('<h2> Bonjour </h2>')
 
