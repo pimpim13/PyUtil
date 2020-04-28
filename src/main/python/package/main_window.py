@@ -10,17 +10,48 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 class MainWindow(QtWidgets.QWidget, Ui_Form):
+# class MainWindow(QtWidgets.QWidget):
     def __init__(self, ctx):
         super().__init__()
-        # self.setup_ui(self)
+        self.setup_ui()
         self.ctx = ctx
-        self.setupUi(self)
+        # self.setupUi(self)
         self.fichier = ""
-        self.modify_widgets()
-        self.setup_connections()
+        # self.modify_widgets()
+        # self.setup_connections()
         self.populate_widgets()
         self.nomfichier = ""
         self.fichier_ref = ""
+
+
+    def setup_ui(self):
+        self.create_widgets()
+        self.modify_widgets()
+        self.create_layouts()
+        self.add_widgets_to_layouts()
+        self.setup_connections()
+
+    def create_widgets(self):
+        self.btn_open_ref = QtWidgets.QPushButton("Importer nouvelle ref")
+        self.btn_open_exclusion = QtWidgets.QPushButton("Importer nouvelle exclusion")
+        self.cb_import_json = QtWidgets.QComboBox()
+        self.cd_import_json_exclusion = QtWidgets.QComboBox()
+        self.btn_convert_ref = QtWidgets.QPushButton("Sauvegarder")
+        self.btn_convert_exclusion = QtWidgets.QPushButton("Sauvegarder")
+        self.btn_text_ref=QtWidgets.QPushButton("Convertir texte")
+        self.btn_text_exclusion =QtWidgets.QPushButton("Convertir texte")
+        self.pt_texte_brut=QtWidgets.QTextEdit()
+        self.le_adress_ref = QtWidgets.QLineEdit()
+        self.le_adress_exclusion = QtWidgets.QLineEdit()
+        self.lw_liste_ref = QtWidgets.QListWidget()
+        self.lw_liste_exclusion = QtWidgets.QListWidget()
+        self.lbl_ref_count = QtWidgets.QLabel()
+        self.lbl_exclusion_count = QtWidgets.QLabel()
+        self.btn_generate_list = QtWidgets.QPushButton("Générer liste")
+        self.btn_exclude = QtWidgets.QPushButton("->")
+        self.btn_include = QtWidgets.QPushButton("<-")
+
+
 
     def modify_widgets(self):
 
@@ -31,10 +62,10 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.lw_liste_ref.setSortingEnabled(True)
         self.lw_liste_exclusion.setSortingEnabled(True)
         self.setAcceptDrops(True)
-        self.btn_convert_ref.setEnabled(True)
-        self.btn_convert_exclusion.setEnabled(True)
-        self.btn_convert_ref.hide()
-        self.btn_convert_exclusion.hide()
+        # self.btn_convert_ref.setEnabled(True)
+        # self.btn_convert_exclusion.setEnabled(True)
+        # self.btn_convert_ref.hide()
+        # self.btn_convert_exclusion.hide()
         self.btn_text_ref.setEnabled(False)
         # self.btn_text_ref.hide()
         self.btn_text_exclusion.setEnabled(False)
@@ -46,18 +77,48 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.le_adress_ref.setPlaceholderText("Recherche")
         self.le_adress_exclusion.setEnabled(True)
         self.le_adress_ref.setEnabled(True)
-        self.lbl_ref_count.setMaximumHeight(30)
+        # self.lbl_ref_count.setMaximumHeight(30)
         self.btn_generate_list.setMinimumHeight(50)
+        self.btn_exclude.setFixedSize(50, 50)
+        self.btn_include.setFixedSize(50, 50)
+        self.lbl_ref_count.setAlignment(QtCore.Qt.AlignCenter)
+        self.lbl_exclusion_count.setAlignment(QtCore.Qt.AlignCenter)
+        self.lbl_ref_count.setStyleSheet("background-color: rgb(155, 255, 143);")
+        self.lbl_exclusion_count.setStyleSheet("background-color: rgba(255, 95, 79, 135);")
+        self.lbl_exclusion_count.setFrameShape(QtWidgets.QFrame.Box)
+        self.lbl_ref_count.setFrameShape(QtWidgets.QFrame.Box)
+        # self.lbl_exclusion_count.setAlignment(QtCore.Qt.AlignHCenter)
         # self.cd_import_json_exclusion.setEnabled(True)
 
         self.pt_texte_brut.setHtml('<h2> Bonjour </h2>')
 
 
+    def create_layouts(self):
+        self.main_layout = QtWidgets.QGridLayout(self)
+
+    def add_widgets_to_layouts(self):
+        self.main_layout.addWidget(self.btn_open_ref, 0, 0, 1, 2)
+        self.main_layout.addWidget(self.btn_open_exclusion, 0, 3, 1, 2)
+        self.main_layout.addWidget(self.cb_import_json, 1, 0, 1, 2)
+        self.main_layout.addWidget(self.cd_import_json_exclusion, 1, 3, 1, 2)
+        self.main_layout.addWidget(self.btn_text_ref, 2, 0, 1, 2)
+        self.main_layout.addWidget(self.btn_text_exclusion, 2, 3, 1, 2)
+        self.main_layout.addWidget(self.pt_texte_brut, 3, 0, 2, 5)
+        self.main_layout.addWidget(self.le_adress_ref, 5, 0, 1, 2)
+        self.main_layout.addWidget(self.le_adress_exclusion, 5, 3, 1, 2)
+        self.main_layout.addWidget(self.lw_liste_ref, 6, 0, 4, 2)
+        self.main_layout.addWidget(self.lw_liste_exclusion, 6, 3, 4, 2)
+        self.main_layout.addWidget(self.lbl_ref_count, 10, 0, 2, 2)
+        self.main_layout.addWidget(self.lbl_exclusion_count, 10, 3, 2, 2)
+        self.main_layout.addWidget(self.btn_generate_list, 13, 0, 2, 5)
+        self.main_layout.addWidget(self.btn_include, 7, 2, 1, 1)
+        self.main_layout.addWidget(self.btn_exclude, 8, 2, 1, 1)
+
 
     def setup_connections(self):
         self.btn_open_ref.clicked.connect(self.init_list)
         self.btn_open_exclusion.clicked.connect(self.init_list_exclusion)
-        self.btn_convert_ref.clicked.connect(self.save_ref_to_json)
+        # self.btn_convert_ref.clicked.connect(self.save_ref_to_json)
         # self.btn_convert_exclusion.clicked.connect(self.save_exclusion_to_json)
         self.btn_exclude.clicked.connect(self.exclude_from_ref)
         self.btn_include.clicked.connect(self.exclude_from_exclusion)
