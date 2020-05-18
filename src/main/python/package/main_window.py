@@ -15,14 +15,10 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         super().__init__()
         self.setup_ui()
         self.ctx = ctx
-        # self.setupUi(self)
         self.fichier = ""
-        # self.modify_widgets()
-        # self.setup_connections()
         self.populate_widgets()
         self.nomfichier = ""
         self.fichier_ref = ""
-
 
     def setup_ui(self):
         self.create_widgets()
@@ -51,8 +47,6 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.btn_exclude = QtWidgets.QPushButton("->")
         self.btn_include = QtWidgets.QPushButton("<-")
 
-
-
     def modify_widgets(self):
 
         # css_file = self.ctx.get_resource("style.css")
@@ -63,40 +57,47 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.lw_liste_exclusion.setSortingEnabled(True)
         self.setAcceptDrops(True)
         # self.btn_convert_ref.setEnabled(True)
-        # self.btn_convert_exclusion.setEnabled(True)
         # self.btn_convert_ref.hide()
+        # self.btn_convert_exclusion.setEnabled(True)
         # self.btn_convert_exclusion.hide()
+
         self.btn_text_ref.setEnabled(False)
         # self.btn_text_ref.hide()
         self.btn_text_exclusion.setEnabled(False)
         # self.btn_text_exclusion.hide()
+
         self.pt_texte_brut.setMaximumHeight(50)
+
         self.lw_liste_ref.setMinimumHeight(200)
         self.lw_liste_exclusion.setMinimumHeight(200)
+
         self.le_adress_exclusion.setPlaceholderText("Recherche")
         self.le_adress_ref.setPlaceholderText("Recherche")
         self.le_adress_exclusion.setEnabled(True)
         self.le_adress_ref.setEnabled(True)
-        # self.lbl_ref_count.setMaximumHeight(30)
+
         self.btn_generate_list.setMinimumHeight(50)
+
         self.btn_exclude.setFixedSize(50, 50)
         self.btn_include.setFixedSize(50, 50)
-        self.lbl_ref_count.setAlignment(QtCore.Qt.AlignCenter)
-        self.lbl_exclusion_count.setAlignment(QtCore.Qt.AlignCenter)
-        self.lbl_ref_count.setStyleSheet("background-color: rgb(155, 255, 143);")
-        self.lbl_exclusion_count.setStyleSheet("background-color: rgba(255, 95, 79, 135);")
-        self.lbl_exclusion_count.setFrameShape(QtWidgets.QFrame.Box)
-        self.lbl_ref_count.setFrameShape(QtWidgets.QFrame.Box)
-        # self.lbl_exclusion_count.setAlignment(QtCore.Qt.AlignHCenter)
-        # self.cd_import_json_exclusion.setEnabled(True)
+
         font = QtGui.QFont()
         font.setWeight(50)
         font.setBold(True)
+
+        self.lbl_ref_count.setAlignment(QtCore.Qt.AlignCenter)
+        self.lbl_ref_count.setStyleSheet("background-color: rgb(155, 255, 143);")
+        self.lbl_ref_count.setFrameShape(QtWidgets.QFrame.Box)
+        self.lbl_ref_count.setText("0")
         self.lbl_ref_count.setFont(font)
+
+        self.lbl_exclusion_count.setAlignment(QtCore.Qt.AlignCenter)
+        self.lbl_exclusion_count.setStyleSheet("background-color: rgba(255, 95, 79, 135);")
+        self.lbl_exclusion_count.setFrameShape(QtWidgets.QFrame.Box)
+        self.lbl_exclusion_count.setText("0")
         self.lbl_exclusion_count.setFont(font)
 
-        self.pt_texte_brut.setHtml('<h2> Bonjour </h2>')
-
+        # self.pt_texte_brut.setHtml('<h2> Bonjour </h2>')
 
     def create_layouts(self):
         self.main_layout = QtWidgets.QGridLayout(self)
@@ -119,7 +120,6 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.main_layout.addWidget(self.btn_include, 7, 2, 1, 1)
         self.main_layout.addWidget(self.btn_exclude, 8, 2, 1, 1)
 
-
     def setup_connections(self):
         self.btn_open_ref.clicked.connect(self.init_list)
         self.btn_open_exclusion.clicked.connect(self.init_list_exclusion)
@@ -133,8 +133,9 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         self.pt_texte_brut.textChanged.connect(self.enable_text)
         self.btn_text_ref.clicked.connect(self.convert_text)
         self.btn_text_exclusion.clicked.connect(self.convert_text_exclusion)
-        self.le_adress_ref.textChanged.connect(self.search_ref)
-        self.le_adress_exclusion.textChanged.connect(self.search_exclusion)
+        self.le_adress_ref.textChanged.connect(lambda:self.search_ref("ref"))
+        self.le_adress_exclusion.textChanged.connect(lambda:self.search_ref("exclusion"))
+        # self.le_adress_exclusion.textChanged.connect(self.search_exclusion)
 
     def populate_widgets(self):
         self.populate_ref()
@@ -177,6 +178,7 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
             return adress
 
     def init_list(self):
+
         """ ouvre un fichier texte contenant les adresses email au format outlook et appelle la fonction de convertion
         en liste"""
 
@@ -195,12 +197,14 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
         """ appelle la fonction de convertion de texte en liste et affiche la liste dans le widget lw_liste_ref"""
         # self.lst_ref = api.txt_to_lst(self.fichier_ref)
         self.lst_ref = api.txt_to_lst(txt)
+        # liste1 = api.txt_to_lst(txt)
         self.lw_liste_ref.clear()
         logging.debug("La liste a été effacée")
         for item in self.lst_ref:
             self.lw_liste_ref.addItem(item)
         self.lw_liste_ref.repaint()
         self.lbl_ref_count.setText(str(len(self.lst_ref)))
+        # self.lbl_ref_count.setText(str(len(liste1)))
 
         api.save_json(lst=self.lst_ref, nom_fichier='lst_ref')
         api.save_json(lst=self.lst_ref, nom_fichier='last_ref')
@@ -299,6 +303,8 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
 
         self.delete_selected_ref()
         self.lw_liste_ref.repaint()
+        self.le_adress_ref.setText("")
+        self.le_adress_exclusion.setText("")
         if not self.flag_ref:
             if not self.lw_liste_exclusion.findItems(self.lst_exclusion[-1], QtCore.Qt.MatchExactly):
                 self.lw_liste_exclusion.addItem(self.lst_exclusion[-1])
@@ -310,6 +316,8 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
 
         self.delete_selected_exclusion()
         self.lw_liste_exclusion.repaint()
+        self.le_adress_ref.setText("")
+        self.le_adress_exclusion.setText("")
         if not self.flag_exclude:
             if not self.lw_liste_ref.findItems(self.lst_ref[-1], QtCore.Qt.MatchExactly ):
                 self.lw_liste_ref.addItem(self.lst_ref[-1])
@@ -342,8 +350,6 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
             message_box.exec_()
         return result
 
-
-
     def load_json(self):
         """ à voir si on conserve """
         filename = self.cb_import_json.currentText()
@@ -353,9 +359,6 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
 
     def dragEnterEvent(self, event):
         event.accept()
-
-    # def dragLeaveEvent(self, event):
-    #     pass
 
     def dropEvent(self, event):
         event.accept()
@@ -369,7 +372,9 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
 
     def convert_text(self):
         txt = self.pt_texte_brut.toPlainText()
-        texte_valide = re.search(r'[A-Z ]+[a-zA-Z]+ <.+@rte-france\.com>;\s*', txt)
+        texte_valide = re.search(r'([A-Z ]+[a-zA-Z]+ <.+@rte-france\.com>; )', txt)
+        if not texte_valide:
+            return
         self.convert_to_list(texte_valide.group())
         self.pt_texte_brut.clear()
         self.btn_text_ref.setEnabled(False)
@@ -377,32 +382,49 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
 
     def convert_text_exclusion(self):
         txt = self.pt_texte_brut.toPlainText()
-        texte_valide = re.search(r'[A-Z ]+[a-zA-Z]+ <.+@rte-france\.com>;\s*', txt)
+        texte_valide = re.search(r'([A-Z ]+[a-zA-Z]+ <.+@rte-france\.com>; )', txt)
+        if not texte_valide:
+            return
         self.convert_txt_to_lst_exclusion(texte_valide.group())
         self.pt_texte_brut.clear()
         self.btn_text_exclusion.setEnabled(False)
         self.btn_text_ref.setEnabled(False)
 
-    def search_ref(self):
-        self.lw_liste_ref.clear()
-        self.populate_ref()
+    def search_ref(self, lste):
+        if lste == "ref":
+            self.lw_liste_ref.clear()
+            self.populate_ref()
+            items = self.lw_liste_ref.findItems(self.le_adress_ref.text(), QtCore.Qt.MatchContains)
 
-        items = self.lw_liste_ref.findItems(self.le_adress_ref.text(), QtCore.Qt.MatchContains)
+        else:
+            self.lw_liste_exclusion.clear()
+            self.populate_exclude()
+            items = self.lw_liste_exclusion.findItems(self.le_adress_exclusion.text(), QtCore.Qt.MatchContains)
 
-        lst = [item.text() for item in items]
-        self.lw_liste_ref.clear()
-        self.lw_liste_ref.addItems(lst)
-        self.lbl_ref_count.setText(str(len(lst)))
+        # self.populate_ref()
 
-    def search_exclusion(self):
-        self.lw_liste_exclusion.clear()
-        self.populate_exclude()
-
-        items = self.lw_liste_exclusion.findItems(self.le_adress_exclusion.text(), QtCore.Qt.MatchContains)
+        # items = self.lw_liste_ref.findItems(self.le_adress_ref.text(), QtCore.Qt.MatchContains)
 
         lst = [item.text() for item in items]
-        self.lw_liste_exclusion.clear()
-        self.lw_liste_exclusion.addItems(lst)
-        self.lbl_exclusion_count.setText(str(len(lst)))
+
+        if lste == "ref":
+            self.lw_liste_ref.clear()
+            self.lw_liste_ref.addItems(lst)
+            self.lbl_ref_count.setText(str(len(lst)))
+        else:
+            self.lw_liste_exclusion.clear()
+            self.lw_liste_exclusion.addItems(lst)
+            self.lbl_exclusion_count.setText(str(len(lst)))
+
+    # def search_exclusion(self):
+    #     self.lw_liste_exclusion.clear()
+    #     self.populate_exclude()
+    #
+    #     items = self.lw_liste_exclusion.findItems(self.le_adress_exclusion.text(), QtCore.Qt.MatchContains)
+    #
+    #     lst = [item.text() for item in items]
+    #     self.lw_liste_exclusion.clear()
+    #     self.lw_liste_exclusion.addItems(lst)
+    #     self.lbl_exclusion_count.setText(str(len(lst)))
 
 

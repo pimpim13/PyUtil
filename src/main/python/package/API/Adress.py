@@ -3,6 +3,7 @@ import logging
 import json
 import os
 import sys
+import re
 from glob import glob
 from pathlib import Path
 from datetime import datetime
@@ -40,21 +41,27 @@ else:
 
 FILE_NAME = setup_file["FILE_NAME"]
 
-
 def txt_to_lst(text=""):
 
-        lst = text.split(';')
-        lst1 = [item.split('<')[1][:-1] for item in lst if '<' in item and '--'in item and 'mar' in item]
-        lst2 = [item.split('<')[1][:-1] for item in lst if '<' in item and not '--' in item]
-        lst3 = list(set(lst2))
-        if lst2:
-            logging.error("la liste contient des listes d'adresses")
+        # lst = text.split(';')
+        # # pprint(lst)
+        # lst1 = [item.split('<')[1][:-1] for item in lst if '<' in item and '--'in item and 'mar' in item]
+        # lst2 = [item.split('<')[1][:-1] for item in lst if '<' in item and not '--' in item]
+        # lst4 = [lst2.append(item.split('<')[1][:-1]) for item in lst if "---" in item]
+        # print(lst4)
+        # lst3 = list(set(lst2))
 
-        pprint(lst2)
-        pprint(len(lst3))
-        pprint(lst1)
 
-        return lst3
+        lst = re.split(r'<|>| |;', text)
+        lst = [item for item in lst if '@' in item]
+        # a = set(test)
+        # b = set(lst2)
+        # c = list(a-b)
+        lst2 = list(set(lst))
+        # print(test)
+        # if lst2:
+        #     logging.error("la liste contient des listes d'adresses")
+        return lst2
 
 
 def write_to_disk(path, lst):
