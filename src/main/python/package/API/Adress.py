@@ -53,14 +53,10 @@ def txt_to_lst(text=""):
 
 
         lst = re.split(r'<|>| |;', text)
-        lst = [item for item in lst if '@' in item]
-        # a = set(test)
-        # b = set(lst2)
-        # c = list(a-b)
+        lst = [item for item in lst if '@' in item and '--' not in item]
+
         lst2 = list(set(lst))
-        # print(test)
-        # if lst2:
-        #     logging.error("la liste contient des listes d'adresses")
+
         return lst2
 
 
