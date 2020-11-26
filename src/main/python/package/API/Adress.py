@@ -1,38 +1,26 @@
 # -*- coding: utf-8 -*-
-import logging
 import json
+import logging
 import os
-import sys
 import re
-from glob import glob
-from pathlib import Path
+import sys
 from datetime import datetime
-from pprint import pprint
+from pathlib import Path
 
 logging.basicConfig(level=logging.DEBUG)
 
-
 path_appli = os.path.dirname(__file__)
 
-if os.path.exists('setup.json'):
-    logging.info("le fichier de conf existe")
-    with open('setup.json','r') as f:
-        setup_file = json.load(f)
-
-
-
-else:
-    setup_file = {}
-    setup_file["ADRESS_DIR"] = 'adress'
-    setup_file["FILE_NAME"] = 'lst_ref.json'
-
-    print(setup_file)
-
+if not os.path.exists('setup.json'):
+    setup_file = {"ADRESS_DIR": 'adress', "FILE_NAME": 'lst_ref.json'}
     with open('setup.json', 'w') as f:
         json.dump(setup_file, f, indent=4)
         logging.info('création du fichier de setup')
 
+    logging.debug("le fichier de conf a été créé")
 
+with open('setup.json', 'r') as f:
+    setup_file = json.load(f)
 
 if sys.platform == 'win32':
     ADRESS_DIR = f'D{os.path.join(Path.home(), setup_file["ADRESS_DIR"])[1:]}'
@@ -41,23 +29,23 @@ else:
 
 FILE_NAME = setup_file["FILE_NAME"]
 
+
 def txt_to_lst(text=""):
+    # lst = text.split(';')
+    # # pprint(lst)
+    # lst1 = [item.split('<')[1][:-1] for item in lst if '<' in item and '--'in item and 'mar' in item]
+    # lst2 = [item.split('<')[1][:-1] for item in lst if '<' in item and not '--' in item]
+    # lst4 = [lst2.append(item.split('<')[1][:-1]) for item in lst if "---" in item]
+    # print(lst4)
+    # lst3 = list(set(lst2))
 
-        # lst = text.split(';')
-        # # pprint(lst)
-        # lst1 = [item.split('<')[1][:-1] for item in lst if '<' in item and '--'in item and 'mar' in item]
-        # lst2 = [item.split('<')[1][:-1] for item in lst if '<' in item and not '--' in item]
-        # lst4 = [lst2.append(item.split('<')[1][:-1]) for item in lst if "---" in item]
-        # print(lst4)
-        # lst3 = list(set(lst2))
+    lst = re.split(r'[<> ;]', text)
+    # lst = re.split(r'<|>| |;', text)
+    lst = [item for item in lst if '@' in item and '--' not in item]
 
+    lst2 = list(set(lst))
 
-        lst = re.split(r'<|>| |;', text)
-        lst = [item for item in lst if '@' in item and '--' not in item]
-
-        lst2 = list(set(lst))
-
-        return lst2
+    return lst2
 
 
 def write_to_disk(path, lst):
@@ -96,7 +84,6 @@ def process(lst_origine, lst_exclusion):
     return lst
 
 
-
 def list_ecart(lst1, lst2):
     """ Retourne les éléments qui ne figurent que dans 1 seule des 2 listes passées en paramètre"""
     # a = set(lst1)
@@ -125,8 +112,6 @@ def save_json(lst, nom_fichier='sans_nom'):
 
     all_list[nom_fichier] = lst
 
-
-
     # data = {nom_fichier: lst}
     with open(path, "w") as f:
         json.dump(all_list, f, indent=4)
@@ -151,7 +136,7 @@ def get_lst_of_json(path):
     """cette fonction récupére la liste des clefs du fichier json de reference
     """
     path = os.path.join(ADRESS_DIR, FILE_NAME)
-    with open(path,'r') as f:
+    with open(path, 'r') as f:
         all_list = json.load(f)
         # print(path)
 
@@ -159,7 +144,6 @@ def get_lst_of_json(path):
 
 
 if __name__ == '__main__':
-
     # test_json = {"toto": [1,2,3], "bibi": [4, 5, 6]}
     # with open("/Users/alainzypinoglou/adress/test_json.json",'w') as f:
     #     json.dump(test_json, f,indent=4)
@@ -180,14 +164,7 @@ if __name__ == '__main__':
     with open('/Users/alainzypinoglou/adress/test_json.json', 'w') as fp:
         json.dump(dict, fp, sort_keys=True, indent=4)
 
-    with open("/Users/alainzypinoglou/adress/test_json.json",'r') as f:
+    with open("/Users/alainzypinoglou/adress/test_json.json", 'r') as f:
         all_list = json.load(f)
         print(type(all_list))
         print(all_list)
-
-
-
-
-
-
-

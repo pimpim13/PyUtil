@@ -372,10 +372,12 @@ class MainWindow(QtWidgets.QWidget, Ui_Form):
 
     def convert_text(self):
         txt = self.pt_texte_brut.toPlainText()
-        texte_valide = re.search(r'([A-Z ]+[a-zA-Z]+ <.+@rte-france\.com>; )', txt)
+        # texte_valide = re.search(r'([A-Z ]+[a-zA-Z]+ <.+@rte-france\.com>; )', txt)
+        texte_valide = re.search(r'.', txt)
         if not texte_valide:
             return
-        self.convert_to_list(texte_valide.group())
+        # self.convert_to_list(texte_valide.group())
+        self.convert_to_list(txt)
         self.pt_texte_brut.clear()
         self.btn_text_ref.setEnabled(False)
         self.btn_text_exclusion.setEnabled(False)
