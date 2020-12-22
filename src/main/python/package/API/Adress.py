@@ -7,8 +7,10 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+niveau = logging.DEBUG
+
 # logging.basicConfig(level=logging.DEBUG)
-logging.basicConfig(filename='test_log.log', level=logging.DEBUG,
+logging.basicConfig(filename='test_log.log', level=niveau,
                     format='%(asctime)s -- %(funcName)s -- %(name)s -- %(levelname)s -- %(message)s')
 path_appli = os.path.dirname(__file__)
 
@@ -128,7 +130,7 @@ def get_lst_of_json(path):
     with open(path, 'r') as f:
         all_list = json.load(f)
 
-    return all_list.keys()
+    return list(all_list.keys())
 
 
 def add_list_to_json(liste, nom='nouvelle_liste'):

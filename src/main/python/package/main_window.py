@@ -1,5 +1,7 @@
 from PySide2 import QtWidgets, QtCore, QtGui
-import package.API.Adress as api
+from PySide2.QtWidgets import QToolButton
+
+import package.API.Adress as Api
 import os
 import re
 import logging
@@ -8,12 +10,189 @@ from datetime import datetime
 logging.basicConfig(level=logging.DEBUG)
 
 
-class MainWindow(QtWidgets.QWidget):
+class Window(QtWidgets.QMainWindow):
 
     def __init__(self, ctx):
         super().__init__()
-        self.setup_ui()
         self.ctx = ctx
+        self.setup_ui()
+
+    def setup_ui(self):
+
+        css_file = self.ctx.get_resource("style.css")
+        with open(css_file, 'r') as f:
+            self.setStyleSheet(f.read())
+
+        lst_json = Api.get_lst_of_json(Api.ADRESS_DIR)
+        print(type(lst_json))
+
+        self.appli = MainWindow()
+        self.setCentralWidget(self.appli)
+        self.toolbar_A = self.addToolBar("Liste A")
+        self.toolbar_B = self.addToolBar("Liste B")
+
+        self.statusBar()
+
+        self._openbutton = QToolButton()
+        self._openbutton.setCheckable(False)
+        self._openbutton.setChecked(False)
+        self._openbutton.setAutoRaise(True)
+        self._openbutton.setIcon(QtGui.QIcon("../icons/arrowA.png"))
+        self._openbutton.setText("Open A")
+        self._openbutton.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
+        self._openbutton.clicked.connect(self.open_bar_A)
+        self._openbutton.setToolTip("Importe une nouvelle liste <b>A</b>")
+        self.toolbar_A.addWidget(self._openbutton)
+        # self._openbutton.setStyleSheet("color:red")
+
+        self._savebuttonA = QToolButton()
+        self._savebuttonA.setCheckable(False)
+        self._savebuttonA.setChecked(False)
+        self._savebuttonA.setAutoRaise(True)
+        self._savebuttonA.setIcon(QtGui.QIcon("../icons/disketteA.png"))
+        self._savebuttonA.setText("Save A")
+        self._savebuttonA.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
+        self._savebuttonA.clicked.connect(self.save_list_A)
+        self.toolbar_A.addWidget(self._savebuttonA)
+
+        self._delbuttonA = QToolButton()
+        self._delbuttonA.setCheckable(False)
+        self._delbuttonA.setChecked(False)
+        self._delbuttonA.setAutoRaise(True)
+        self._delbuttonA.setIcon(QtGui.QIcon("../icons/trashA.png"))
+        self._delbuttonA.setText("Effacer A")
+        self._delbuttonA.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
+        self._delbuttonA.clicked.connect(self.del_list_A)
+        self._delbuttonA.setToolTip("Efface la liste <b>A</b>")
+
+        self.toolbar_A.addWidget(self._delbuttonA)
+
+        self.toolbar_A.addSeparator()
+
+        self._openJsonbuttonA = QToolButton()
+        # self._openJsonbuttonA.setMenu(self._menu)
+
+        self._openJsonbuttonA.setCheckable(False)
+        self._openJsonbuttonA.setChecked(False)
+        self._openJsonbuttonA.setAutoRaise(True)
+        self._openJsonbuttonA.setIcon(QtGui.QIcon("../icons/JsonA.png"))
+        self._openJsonbuttonA.setText("A")
+        self._openJsonbuttonA.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
+        self._openJsonbuttonA.clicked.connect(self.open_json_A)
+        self.toolbar_A.addWidget(self._openJsonbuttonA)
+
+        self._delJsonbuttonA = QToolButton()
+        self._delJsonbuttonA.setCheckable(False)
+        self._delJsonbuttonA.setChecked(False)
+        self._delJsonbuttonA.setAutoRaise(True)
+        self._delJsonbuttonA.setIcon(QtGui.QIcon("../icons/x-markA.png"))
+        self._delJsonbuttonA.setText("Del Json A")
+        self._delJsonbuttonA.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
+        self._delJsonbuttonA.clicked.connect(self.del_json_A)
+        self.toolbar_A.addWidget(self._delJsonbuttonA)
+
+        # self.toolbar_A.addSeparator()
+        # self.toolbar_A.addSeparator()
+
+        self._delJsonbuttonB = QToolButton()
+        self._delJsonbuttonB.setCheckable(False)
+        self._delJsonbuttonB.setChecked(False)
+        self._delJsonbuttonB.setAutoRaise(True)
+        self._delJsonbuttonB.setIcon(QtGui.QIcon("../icons/x-markB.png"))
+        self._delJsonbuttonB.setText("Del Json B")
+        self._delJsonbuttonB.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
+        self._delJsonbuttonB.clicked.connect(self.del_json_B)
+        self.toolbar_B.addWidget(self._delJsonbuttonB)
+
+        self._openJsonbuttonB = QToolButton()
+        self._openJsonbuttonB.setCheckable(False)
+        self._openJsonbuttonB.setChecked(False)
+        self._openJsonbuttonB.setAutoRaise(True)
+        self._openJsonbuttonB.setIcon(QtGui.QIcon("../icons/JsonB.png"))
+        self._openJsonbuttonB.setText("B")
+        self._openJsonbuttonB.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
+        self._openJsonbuttonB.clicked.connect(self.open_json_B)
+        self.toolbar_B.addWidget(self._openJsonbuttonB)
+
+        self.toolbar_B.addSeparator()
+
+        self._delbuttonB = QToolButton()
+        self._delbuttonB.setCheckable(False)
+        self._delbuttonB.setChecked(False)
+        self._delbuttonB.setAutoRaise(True)
+        self._delbuttonB.setIcon(QtGui.QIcon("../icons/trashB.png"))
+        self._delbuttonB.setText("Effacer B")
+        self._delbuttonB.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
+        self._delbuttonB.clicked.connect(self.del_list_B)
+        self._delbuttonB.setToolTip("Efface la liste <b>A</b>")
+
+        self.toolbar_B.addWidget(self._delbuttonB)
+
+        self._savebuttonB = QToolButton()
+        self._savebuttonB.setCheckable(False)
+        self._savebuttonB.setChecked(False)
+        self._savebuttonB.setAutoRaise(True)
+        self._savebuttonB.setIcon(QtGui.QIcon("../icons/disketteB.png"))
+        self._savebuttonB.setText("Save B")
+        self._savebuttonB.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
+        self._savebuttonB.clicked.connect(self.save_list_B)
+        self.toolbar_B.addWidget(self._savebuttonB)
+
+        self._openbuttonB = QToolButton()
+        self._openbuttonB.setCheckable(False)
+        self._openbuttonB.setChecked(False)
+        self._openbuttonB.setAutoRaise(True)
+        self._openbuttonB.setIcon(QtGui.QIcon("../icons/ArrowB.png"))
+        self._openbuttonB.setText("Open B")
+        self._openbuttonB.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
+        self._openbuttonB.clicked.connect(self.open_bar_B)
+        self._openbuttonB.setToolTip("Importe une nouvelle liste <b>B</b>")
+
+        self.toolbar_B.addWidget(self._openbuttonB)
+
+    def test(self):
+        pass
+
+    def open_bar_A(self):
+        self.appli.init_list()
+
+    def open_bar_B(self):
+        self.appli.init_list_exclusion()
+
+    def open_json_A(self):
+        # self._openJsonbuttonA.showMenu()
+        # return
+        self.appli.load_json(self.appli.cb_import_json.currentText(), 'ref')
+
+    def open_json_B(self):
+        self.appli.load_json(self.appli.cb_import_json_exclusion.currentText(), 'excl')
+
+    def save_list_A(self):
+        pass
+
+    def save_list_B(self):
+        pass
+
+    def del_list_A(self):
+        self.appli.clear_list("A")
+
+    def del_list_B(self):
+        self.appli.clear_list("B")
+
+    def del_json_A(self):
+        self.appli.del_json(self.appli.cb_import_json.currentText())
+
+    def del_json_B(self):
+        self.appli.del_json(self.appli.cb_import_json_exclusion.currentText())
+
+
+class MainWindow(QtWidgets.QWidget):
+
+    # def __init__(self, ctx):
+    def __init__(self):
+        super().__init__()
+        self.setup_ui()
+        # self.ctx = ctx
         self.fichier = ""
         self.populate_widgets()
         self.nomfichier = ""
@@ -54,8 +233,6 @@ class MainWindow(QtWidgets.QWidget):
         self.btn_del_user = QtWidgets.QPushButton(QtGui.QIcon("../icons/user.png"), "")
         self.btn_clear_ref = QtWidgets.QPushButton("Effacer A")
         self.btn_clear_exclusion = QtWidgets.QPushButton("Effacer B")
-
-
 
     def modify_widgets(self):
 
@@ -106,7 +283,9 @@ class MainWindow(QtWidgets.QWidget):
         self.lbl_exclusion_count.setText("0")
         self.lbl_exclusion_count.setFont(font)
 
-        self.btn_del_user.setToolTip("Supprime la selection de la liste A")
+        # QtWidgets.QToolTip.setFont(QtGui.QFont('Arial', 18))
+
+        self.btn_del_user.setToolTip("Supprime la selection de la <b>liste A</b>")
 
     def create_layouts(self):
         self.main_layout = QtWidgets.QGridLayout(self)
@@ -152,7 +331,6 @@ class MainWindow(QtWidgets.QWidget):
                                                                       'ref'))
         self.btn_load_json_exclusion.clicked.connect(lambda: self.load_json(self.cb_import_json_exclusion.currentText(),
                                                                             'excl'))
-
         self.btn_del_json_ref.clicked.connect(lambda: self.del_json(self.cb_import_json.currentText()))
         self.btn_del_json_exclusion.clicked.connect(lambda: self.del_json(self.cb_import_json_exclusion.currentText()))
         self.pt_texte_brut.textChanged.connect(self.enable_text)
@@ -170,27 +348,27 @@ class MainWindow(QtWidgets.QWidget):
         self.populate_cb_json()
 
     def populate_ref(self, nom_liste='last_ref'):
-        self.lst_ref = api.get_lst_from_json(nom_liste)
+        self.lst_ref = Api.get_lst_from_json(nom_liste)
         self.lw_liste_ref.clear()
         if self.lst_ref or nom_liste == "last_ref":
             self.lw_liste_ref.addItems(self.lst_ref)
             self.lbl_ref_count.setText(str(len(self.lst_ref)))
         self.lw_liste_ref.repaint()
-        api.add_list_to_json(self.lst_ref, "last_ref")
+        Api.add_list_to_json(self.lst_ref, "last_ref")
         return
 
     def populate_exclude(self, nom_liste='last_exclusion'):
-        self.lst_exclusion = api.get_lst_from_json(nom_liste)
+        self.lst_exclusion = Api.get_lst_from_json(nom_liste)
         self.lw_liste_exclusion.clear()
         if self.lst_exclusion or nom_liste == "last_exclusion":
             self.lw_liste_exclusion.addItems(self.lst_exclusion)
             self.lbl_exclusion_count.setText(str(len(self.lst_exclusion)))
         self.lw_liste_exclusion.repaint()
-        api.add_list_to_json(self.lst_exclusion, "last_exclusion")
+        Api.add_list_to_json(self.lst_exclusion, "last_exclusion")
         return
 
     def populate_cb_json(self):
-        lst_json = api.get_lst_of_json(api.ADRESS_DIR)
+        lst_json = Api.get_lst_of_json(Api.ADRESS_DIR)
         self.cb_import_json.clear()
         self.cb_import_json_exclusion.clear()
         self.cb_import_json.addItem("")
@@ -203,7 +381,7 @@ class MainWindow(QtWidgets.QWidget):
     def open_file(self):
         file_dialog = QtWidgets.QFileDialog(self)
         file_dialog.setMimeTypeFilters(["text/plain"])
-        adress_dir = api.ADRESS_DIR
+        adress_dir = Api.ADRESS_DIR
         file_dialog.setDirectory(adress_dir)
 
         if file_dialog.exec_() == QtWidgets.QDialog.Accepted:
@@ -225,11 +403,13 @@ class MainWindow(QtWidgets.QWidget):
             logging.info(f'ouverture du fichier {self.filename_ref}')
             txt = f.read().strip()
         self.convert_to_list(txt)
+        return
+
 
     def convert_to_list(self, txt):
         """ appelle la fonction de convertion de texte en liste et affiche la liste dans le widget lw_liste_ref"""
         # self.lst_ref = api.txt_to_lst(self.fichier_ref)
-        self.lst_ref = api.txt_to_lst(txt)
+        self.lst_ref = Api.txt_to_lst(txt)
         # liste1 = api.txt_to_lst(txt)
         self.lw_liste_ref.clear()
         # logging.debug("La liste a été effacée")
@@ -239,26 +419,36 @@ class MainWindow(QtWidgets.QWidget):
         self.lbl_ref_count.setText(str(len(self.lst_ref)))
         # self.lbl_ref_count.setText(str(len(liste1)))
 
-        api.save_json(lst=self.lst_ref, nom_fichier='lst_ref')
-        api.save_json(lst=self.lst_ref, nom_fichier='last_ref')
+        Api.save_json(lst=self.lst_ref, nom_fichier='lst_ref')
+        Api.save_json(lst=self.lst_ref, nom_fichier='last_ref')
         self.btn_convert_ref.setEnabled(True)
 
         return
 
     def init_list_exclusion(self):
         self.fichier = self.open_file()
+        if not self.fichier:
+            return
         self.filename_exclusion = os.path.basename(self.fichier[:-4])
+        # if self.fichier_exclusion:
+        #     self.filename_ref = os.path.basename(self.fichier_exclusion[:-4])
+        # else:
+        #     logging.info("L'ouverture du fichier a échoué")
+        #     return
+
+
+
 
         with open(self.fichier, 'r', encoding='ISO-8859-1') as f:
-            # logging.info(f'ouverture du fichier {self.filename_exclusion}')
+            logging.info(f'ouverture du fichier {self.filename_exclusion}')
             txt = f.read().strip()
-
         self.convert_txt_to_lst_exclusion(txt)
+        return
 
     def convert_txt_to_lst_exclusion(self, txt):
         """converti le texte en liste"""
         # self.lst_exclusion = api.txt_to_lst(self.fichier)
-        self.lst_exclusion = api.txt_to_lst(txt)
+        self.lst_exclusion = Api.txt_to_lst(txt)
         self.lw_liste_exclusion.clear()
         # logging.info("la liste exclusion a été effacée")
         for item in self.lst_exclusion:
@@ -266,18 +456,18 @@ class MainWindow(QtWidgets.QWidget):
         self.lw_liste_exclusion.repaint()
         self.lbl_exclusion_count.setText(str(len(self.lst_exclusion)))
         # api.save_json(lst=self.lst_exclusion, nom_liste='lst_exclusion')
-        api.save_json(lst=self.lst_exclusion, nom_fichier='lst_exclusion')
-        api.save_json(lst=self.lst_exclusion, nom_fichier='last_exclusion')
+        Api.save_json(lst=self.lst_exclusion, nom_fichier='lst_exclusion')
+        Api.save_json(lst=self.lst_exclusion, nom_fichier='last_exclusion')
         return
 
     def save_ref_to_json(self):
         if self.filename_ref:
-            api.save_json(self.lst_ref, self.filename_ref)
+            Api.save_json(self.lst_ref, self.filename_ref)
 
     def save_exclusion_to_json(self):
         path = os.path.basename(self.filename_exclusion)[:-5]
         # logging.info(path)
-        api.save_json(self.lst_exclusion, path)
+        Api.save_json(self.lst_exclusion, path)
 
     def get_selected_item_ref(self):
         selected_items = self.lw_liste_ref.selectedItems()
@@ -302,13 +492,13 @@ class MainWindow(QtWidgets.QWidget):
                 self.lst_ref.remove(selected_item.text())
                 self.lbl_ref_count.setText(str(len(self.lst_ref)))
                 # api.save_json(lst=self.lst_ref, nom_fichier='lst_ref')
-                api.save_json(lst=self.lst_ref, nom_fichier='last_ref')
+                Api.save_json(lst=self.lst_ref, nom_fichier='last_ref')
 
                 if selected_item.text() not in self.lst_exclusion:
                     self.lst_exclusion.append(selected_item.text())
                     self.lbl_exclusion_count.setText(str(len(self.lst_exclusion)))
                     # api.save_json(lst=self.lst_exclusion, nom_fichier='lst_exclusion')
-                    api.save_json(lst=self.lst_exclusion, nom_fichier='last_exclusion')
+                    Api.save_json(lst=self.lst_exclusion, nom_fichier='last_exclusion')
                 else:
                     self.flag = True
 
@@ -326,12 +516,12 @@ class MainWindow(QtWidgets.QWidget):
                 self.lst_exclusion.remove(selected_item.text())
                 self.lbl_exclusion_count.setText(str(len(self.lst_exclusion)))
                 # api.save_json(lst=self.lst_exclusion, nom_fichier='lst_exclusion')
-                api.save_json(lst=self.lst_exclusion, nom_fichier='last_exclusion')
+                Api.save_json(lst=self.lst_exclusion, nom_fichier='last_exclusion')
                 if selected_item.text() not in self.lst_ref:
                     self.lst_ref.append(selected_item.text())
                     self.lbl_ref_count.setText(str(len(self.lst_ref)))
                     # api.save_json(lst=self.lst_ref, nom_fichier='lst_ref')
-                    api.save_json(lst=self.lst_ref, nom_fichier='last_ref')
+                    Api.save_json(lst=self.lst_ref, nom_fichier='last_ref')
                 else:
                     self.flag = True
 
@@ -350,14 +540,14 @@ class MainWindow(QtWidgets.QWidget):
 
         lst_filtre = []
         if func == "exclude":
-            lst_filtre = api.process(lst_origine=self.lst_ref, lst_exclusion=self.lst_exclusion)
+            lst_filtre = Api.process(lst_origine=self.lst_ref, lst_exclusion=self.lst_exclusion)
             lst_filtre.sort()
         elif func == "add":
-            lst_filtre = api.add_list(self.lst_ref, self.lst_exclusion)
+            lst_filtre = Api.add_list(self.lst_ref, self.lst_exclusion)
             lst_filtre.sort()
 
         if nom_liste:
-            api.add_list_to_json(lst_filtre, nom=nom_liste)
+            Api.add_list_to_json(lst_filtre, nom=nom_liste)
             logging.info(f"la liste {nom_liste} a été rajouté au fichier JSON")
             self.populate_cb_json()
 
@@ -371,14 +561,14 @@ class MainWindow(QtWidgets.QWidget):
                 t = datetime.now()
                 nom_fichier_filtre = str(t.date())+"-"+str(t.time())[:-7]
 
-        result = api.write_to_disk(path=os.path.join(api.ADRESS_DIR, nom_fichier_filtre), lst=lst_filtre)
+        result = Api.write_to_disk(path=os.path.join(Api.ADRESS_DIR, nom_fichier_filtre), lst=lst_filtre)
         # result = True
         if result:
             message_box = QtWidgets.QMessageBox()
             message_box.setWindowTitle("Process")
             message_box.setText(f"Le fichier {os.path.basename(nom_fichier_filtre)}"
                                 f" contenant {len(lst_filtre)} adresses a été créé dans le"
-                                f" dossier {api.ADRESS_DIR}")
+                                f" dossier {Api.ADRESS_DIR}")
             message_box.exec_()
         return result
 
@@ -410,7 +600,7 @@ class MainWindow(QtWidgets.QWidget):
             return
 
         if reponse == QtWidgets.QMessageBox.StandardButton.Yes:
-            api.remove_list_from_json(nom_lst)
+            Api.remove_list_from_json(nom_lst)
             logging.info(f"La liste {nom_lst} a été supprimée")
             self.populate_cb_json()
 
@@ -425,11 +615,10 @@ class MainWindow(QtWidgets.QWidget):
                 print(item.text())
                 self.lw_liste_ref.takeItem(self.lw_liste_ref.row(item))
                 self.lst_ref.remove(item.text())
-                api.add_list_to_json(self.lst_ref, nom="last_ref")
+                Api.add_list_to_json(self.lst_ref, nom="last_ref")
                 self.populate_ref()
         else:
             print("NOK")
-
 
     def dragEnterEvent(self, event):
         event.accept()
@@ -490,16 +679,15 @@ class MainWindow(QtWidgets.QWidget):
         lst = []
         if lw == "A":
             self.lw_liste_ref.clear()
-            api.add_list_to_json(lst, "last_ref")
+            Api.add_list_to_json(lst, "last_ref")
             self.populate_ref(nom_liste="last_ref")
             self.lw_liste_ref.repaint()
         else:
             self.lw_liste_exclusion.clear()
-            api.add_list_to_json(lst, "last_exclusion")
+            Api.add_list_to_json(lst, "last_exclusion")
             self.populate_exclude(nom_liste="last_exclusion")
             self.lw_liste_exclusion.repaint()
         return
-
 
 
 if __name__ == '__main__':
