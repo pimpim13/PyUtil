@@ -5,7 +5,7 @@ from package.main_window import Window, MainWindow
 
 if __name__ == '__main__':
     appctxt = ApplicationContext()       # 1. Instantiate ApplicationContext
-    # window = MainWindow(ctx=appctxt)
+    # window = MainWindow()
     window = Window(ctx=appctxt)
     # window.resize(650, 550)
     window.show()

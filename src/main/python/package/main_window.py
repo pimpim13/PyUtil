@@ -5,7 +5,7 @@ import package.API.Adress as Api
 import os
 import re
 import logging
-from datetime import datetime
+# from datetime import datetime
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -19,17 +19,19 @@ class Window(QtWidgets.QMainWindow):
 
     def setup_ui(self):
 
-        css_file = self.ctx.get_resource("style.css")
-        with open(css_file, 'r') as f:
-            self.setStyleSheet(f.read())
+        css_file = "../resources/base/style.css"
+        if not os.path.exists(css_file):
+            logging.error(f"Le fichier {css_file} est introuvable")
+        else:
+            # css_file = self.ctx.get_resource("style.css")
+            with open(css_file, 'r') as f:
+                self.setStyleSheet(f.read())
 
         lst_json = Api.get_lst_of_json(Api.ADRESS_DIR)
-        print(type(lst_json))
+        self.w1 = MainWindow()
+        self.setCentralWidget(self.w1)
 
-        self.appli = MainWindow()
-        self.setCentralWidget(self.appli)
         self.toolbar_A = self.addToolBar("Liste A")
-        self.toolbar_B = self.addToolBar("Liste B")
 
         self.statusBar()
 
@@ -67,7 +69,7 @@ class Window(QtWidgets.QMainWindow):
 
         self.toolbar_A.addWidget(self._delbuttonA)
 
-        self.toolbar_A.addSeparator()
+        # self.toolbar_A.addSeparator()
 
         self._openJsonbuttonA = QToolButton()
         # self._openJsonbuttonA.setMenu(self._menu)
@@ -91,9 +93,6 @@ class Window(QtWidgets.QMainWindow):
         self._delJsonbuttonA.clicked.connect(self.del_json_A)
         self.toolbar_A.addWidget(self._delJsonbuttonA)
 
-        # self.toolbar_A.addSeparator()
-        # self.toolbar_A.addSeparator()
-
         self._delJsonbuttonB = QToolButton()
         self._delJsonbuttonB.setCheckable(False)
         self._delJsonbuttonB.setChecked(False)
@@ -102,7 +101,7 @@ class Window(QtWidgets.QMainWindow):
         self._delJsonbuttonB.setText("Del Json B")
         self._delJsonbuttonB.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
         self._delJsonbuttonB.clicked.connect(self.del_json_B)
-        self.toolbar_B.addWidget(self._delJsonbuttonB)
+        self.toolbar_A.addWidget(self._delJsonbuttonB)
 
         self._openJsonbuttonB = QToolButton()
         self._openJsonbuttonB.setCheckable(False)
@@ -112,9 +111,7 @@ class Window(QtWidgets.QMainWindow):
         self._openJsonbuttonB.setText("B")
         self._openJsonbuttonB.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
         self._openJsonbuttonB.clicked.connect(self.open_json_B)
-        self.toolbar_B.addWidget(self._openJsonbuttonB)
-
-        self.toolbar_B.addSeparator()
+        self.toolbar_A.addWidget(self._openJsonbuttonB)
 
         self._delbuttonB = QToolButton()
         self._delbuttonB.setCheckable(False)
@@ -126,7 +123,7 @@ class Window(QtWidgets.QMainWindow):
         self._delbuttonB.clicked.connect(self.del_list_B)
         self._delbuttonB.setToolTip("Efface la liste <b>A</b>")
 
-        self.toolbar_B.addWidget(self._delbuttonB)
+        self.toolbar_A.addWidget(self._delbuttonB)
 
         self._savebuttonB = QToolButton()
         self._savebuttonB.setCheckable(False)
@@ -136,7 +133,7 @@ class Window(QtWidgets.QMainWindow):
         self._savebuttonB.setText("Save B")
         self._savebuttonB.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
         self._savebuttonB.clicked.connect(self.save_list_B)
-        self.toolbar_B.addWidget(self._savebuttonB)
+        self.toolbar_A.addWidget(self._savebuttonB)
 
         self._openbuttonB = QToolButton()
         self._openbuttonB.setCheckable(False)
@@ -148,10 +145,7 @@ class Window(QtWidgets.QMainWindow):
         self._openbuttonB.clicked.connect(self.open_bar_B)
         self._openbuttonB.setToolTip("Importe une nouvelle liste <b>B</b>")
 
-        self.toolbar_B.addWidget(self._openbuttonB)
-
-    def test(self):
-        pass
+        self.toolbar_A.addWidget(self._openbuttonB)
 
     def open_bar_A(self):
         self.appli.init_list()
@@ -186,6 +180,50 @@ class Window(QtWidgets.QMainWindow):
         self.appli.del_json(self.appli.cb_import_json_exclusion.currentText())
 
 
+class Layer3V(QtWidgets.QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setup_ui()
+
+    def setup_ui(self):
+        self.layout3v = QtWidgets.QVBoxLayout()
+        self.lw_lst1 =QtWidgets.QListWidget()
+        self.lw_lst2 =QtWidgets.QListWidget()
+        self.lw_lst3 =QtWidgets.QListWidget()
+        self.lbl_1 = QtWidgets.QLabel("Liste 1")
+        self.lbl_2 = QtWidgets.QLabel("Liste 2")
+        self.lbl_3 = QtWidgets.QLabel("Liste 3")
+        self.layout3v.addWidget(self.lbl_1)
+        self.layout3v.addWidget(self.lw_lst1)
+        self.layout3v.addWidget(self.lbl_2)
+        self.layout3v.addWidget(self.lw_lst2)
+        self.layout3v.addWidget(self.lbl_3)
+        self.layout3v.addWidget(self.lw_lst3)
+
+        self.setLayout(self.layout3v)
+
+
+class MonLayerP(QtWidgets.QWidget):
+    def __init__(self, w1, w2):
+        super().__init__()
+        self.w1 = w1
+        self.w2 = w2
+        self.setup_ui()
+
+    def setup_ui(self):
+        self.create_layouts()
+        self.setLayout(self.main_layout)
+
+    def create_layouts(self):
+        self.main_layout = QtWidgets.QHBoxLayout()
+        self.layout1 = QtWidgets.QVBoxLayout()
+        self.layout2 = QtWidgets.QVBoxLayout()
+        self.main_layout.addLayout(self.layout1)
+        self.main_layout.addLayout(self.layout2)
+        self.layout1.addWidget(self.w1)
+        self.layout2.addWidget(self.w2)
+
+
 class MainWindow(QtWidgets.QWidget):
 
     # def __init__(self, ctx):
@@ -199,6 +237,7 @@ class MainWindow(QtWidgets.QWidget):
         self.fichier_ref = ""
 
     def setup_ui(self):
+
         self.create_widgets()
         self.modify_widgets()
         self.create_layouts()
@@ -226,13 +265,16 @@ class MainWindow(QtWidgets.QWidget):
         self.lw_liste_exclusion = QtWidgets.QListWidget()
         self.lbl_ref_count = QtWidgets.QLabel()
         self.lbl_exclusion_count = QtWidgets.QLabel()
-        self.btn_generate_list = QtWidgets.QPushButton("Générer liste A-B")
-        self.btn_add_list = QtWidgets.QPushButton("Union des listes A+B")
+        self.btn_generate_list = QtWidgets.QPushButton("A-B")
+        self.btn_add_list = QtWidgets.QPushButton("A+B")
+        self.btn_diff_list = QtWidgets.QPushButton("X")
         self.btn_exclude = QtWidgets.QPushButton(QtGui.QIcon("../icons/next.png"), "")
         self.btn_include = QtWidgets.QPushButton(QtGui.QIcon("../icons/back.png"), "")
         self.btn_del_user = QtWidgets.QPushButton(QtGui.QIcon("../icons/user.png"), "")
         self.btn_clear_ref = QtWidgets.QPushButton("Effacer A")
         self.btn_clear_exclusion = QtWidgets.QPushButton("Effacer B")
+
+        self.layerV = Layer3V()
 
     def modify_widgets(self):
 
@@ -256,8 +298,9 @@ class MainWindow(QtWidgets.QWidget):
         self.le_adress_exclusion.setEnabled(True)
         self.le_adress_ref.setEnabled(True)
 
-        self.btn_generate_list.setMinimumHeight(50)
-        self.btn_add_list.setMinimumHeight(50)
+        self.btn_generate_list.setFixedSize(50, 50)
+        self.btn_add_list.setFixedSize(50, 50)
+        self.btn_diff_list.setFixedSize(50, 50)
 
         self.btn_exclude.setFixedSize(50, 50)
         self.btn_include.setFixedSize(50, 50)
@@ -283,12 +326,30 @@ class MainWindow(QtWidgets.QWidget):
         self.lbl_exclusion_count.setText("0")
         self.lbl_exclusion_count.setFont(font)
 
+        self.layerV.lbl_2.hide()
+        self.layerV.lw_lst2.hide()
+        self.layerV.lbl_3.hide()
+        self.layerV.lw_lst3.hide()
+        self.layerV.hide()
+
+        self.layerV.lw_lst1.setFixedWidth(250)
+
         # QtWidgets.QToolTip.setFont(QtGui.QFont('Arial', 18))
 
         self.btn_del_user.setToolTip("Supprime la selection de la <b>liste A</b>")
+        self.btn_diff_list.setToolTip("Renvoie la difference symetrique entre les 2 listes")
+        self.btn_generate_list.setToolTip("Renvoie la liste <b>A</b> sans les elements de la liste <b>B</b>")
+        self.btn_add_list.setToolTip("Renvoie la liste des éléments fusionnés de <b>A</b> et <b>B</b>")
+        self.btn_exclude.setToolTip("Déplace la selection de la liste <b>A</b> vers la liste <b>B</b>")
+        self.btn_include.setToolTip("Déplace la selection de la liste <b>B</b> vers la liste <b>A</b>")
 
     def create_layouts(self):
-        self.main_layout = QtWidgets.QGridLayout(self)
+        self.layout_principal = QtWidgets.QHBoxLayout(self)
+        self.main_layout = QtWidgets.QGridLayout()
+        self.layout_resultats = QtWidgets.QVBoxLayout()
+        self.layout_principal.addLayout(self.main_layout)
+        self.layout_principal.addLayout(self.layout_resultats)
+
 
     def add_widgets_to_layouts(self):
         self.main_layout.addWidget(self.btn_open_ref, 0, 0, 1, 2)
@@ -310,15 +371,19 @@ class MainWindow(QtWidgets.QWidget):
         self.main_layout.addWidget(self.btn_clear_exclusion, 6, 3, 1, 1)
         self.main_layout.addWidget(self.le_adress_exclusion, 6, 4, 1, 1)
 
-        self.main_layout.addWidget(self.lw_liste_ref, 7, 0, 3, 2)
-        self.main_layout.addWidget(self.lw_liste_exclusion, 7, 3, 3, 2)
+        self.main_layout.addWidget(self.lw_liste_ref, 7, 0, 4, 2)
+        self.main_layout.addWidget(self.lw_liste_exclusion, 7, 3, 4, 2)
         self.main_layout.addWidget(self.lbl_ref_count, 11, 0, 2, 2)
         self.main_layout.addWidget(self.lbl_exclusion_count, 11, 3, 2, 2)
-        self.main_layout.addWidget(self.btn_generate_list, 14, 0, 2, 2)
-        self.main_layout.addWidget(self.btn_add_list, 14, 3, 2, 2)
+
         self.main_layout.addWidget(self.btn_include, 7, 2, 1, 1)
         self.main_layout.addWidget(self.btn_exclude, 8, 2, 1, 1)
-        self.main_layout.addWidget(self.btn_del_user, 9, 2, 2, 1)
+        self.main_layout.addWidget(self.btn_del_user, 6, 2, 1, 1)
+        self.main_layout.addWidget(self.btn_diff_list, 9, 2, 1, 1)
+        self.main_layout.addWidget(self.btn_generate_list, 10, 2, 1, 1)
+        self.main_layout.addWidget(self.btn_add_list, 11, 2, 1, 1)
+
+        self.layout_resultats.addWidget(self.layerV)
 
     def setup_connections(self):
         self.btn_open_ref.clicked.connect(self.init_list)
@@ -327,6 +392,7 @@ class MainWindow(QtWidgets.QWidget):
         self.btn_include.clicked.connect(self.delete_selected_exclusion)
         self.btn_generate_list.clicked.connect(lambda: self.generate_list("exclude"))
         self.btn_add_list.clicked.connect(lambda: self.generate_list("add"))
+        self.btn_diff_list.clicked.connect(lambda: self.generate_list("diff"))
         self.btn_load_json_ref.clicked.connect(lambda: self.load_json(self.cb_import_json.currentText(),
                                                                       'ref'))
         self.btn_load_json_exclusion.clicked.connect(lambda: self.load_json(self.cb_import_json_exclusion.currentText(),
@@ -405,7 +471,6 @@ class MainWindow(QtWidgets.QWidget):
         self.convert_to_list(txt)
         return
 
-
     def convert_to_list(self, txt):
         """ appelle la fonction de convertion de texte en liste et affiche la liste dans le widget lw_liste_ref"""
         # self.lst_ref = api.txt_to_lst(self.fichier_ref)
@@ -435,9 +500,6 @@ class MainWindow(QtWidgets.QWidget):
         # else:
         #     logging.info("L'ouverture du fichier a échoué")
         #     return
-
-
-
 
         with open(self.fichier, 'r', encoding='ISO-8859-1') as f:
             logging.info(f'ouverture du fichier {self.filename_exclusion}')
@@ -537,44 +599,99 @@ class MainWindow(QtWidgets.QWidget):
 
         else:
             nom_liste = None
-
+        self.layerV.show()
         lst_filtre = []
         if func == "exclude":
             lst_filtre = Api.process(lst_origine=self.lst_ref, lst_exclusion=self.lst_exclusion)
             lst_filtre.sort()
+            self.layerV.lbl_2.hide()
+            self.layerV.lbl_3.hide()
+            self.layerV.lw_lst2.hide()
+            self.layerV.lw_lst3.hide()
         elif func == "add":
             lst_filtre = Api.add_list(self.lst_ref, self.lst_exclusion)
             lst_filtre.sort()
+            self.layerV.lbl_2.hide()
+            self.layerV.lbl_3.hide()
+            self.layerV.lw_lst2.hide()
+            self.layerV.lw_lst3.hide()
+        elif func == "diff":
+            lst_filtre = Api.list_ecart(self.lst_ref, self.lst_exclusion)
+            lst_A = Api.process(self.lst_ref, self.lst_exclusion)
+            lst_B = Api.process(self.lst_exclusion, self.lst_ref)
+            self.layerV.lbl_2.setText("Dans A pas dans B")
+            self.layerV.lbl_3.setText("Dans B pas dans A")
+            self.layerV.lw_lst2.addItems(lst_A)
+            self.layerV.lw_lst3.addItems(lst_B)
+            self.layerV.lbl_2.show()
+            self.layerV.lbl_3.show()
+            self.layerV.lw_lst2.show()
+            self.layerV.lw_lst3.show()
+
+            lst_filtre.sort()
+
+        self.layerV.lbl_1.setText("Resultats")
+        self.layerV.lw_lst1.addItems(lst_filtre)
 
         if nom_liste:
             Api.add_list_to_json(lst_filtre, nom=nom_liste)
             logging.info(f"la liste {nom_liste} a été rajouté au fichier JSON")
             self.populate_cb_json()
 
-        if self.fichier_ref:
-            nom_fichier_filtre = f"{os.path.splitext(self.fichier_ref)[0]}" \
-                                 f"_{func}{os.path.splitext(self.fichier_ref)[1]}"
-        else:
-            file_dialog = QtWidgets.QFileDialog(self)
-            nom_fichier_filtre = file_dialog.getSaveFileName(self)[0]
-            if not nom_fichier_filtre:
-                t = datetime.now()
-                nom_fichier_filtre = str(t.date())+"-"+str(t.time())[:-7]
+        result = self.save_result(lst_filtre)
 
-        result = Api.write_to_disk(path=os.path.join(Api.ADRESS_DIR, nom_fichier_filtre), lst=lst_filtre)
+        # if self.fichier_ref:
+        #     nom_fichier_filtre = f"{os.path.splitext(self.fichier_ref)[0]}" \
+        #                          f"_{func}{os.path.splitext(self.fichier_ref)[1]}"
+        # else:
+        #     file_dialog = QtWidgets.QFileDialog(self)
+        #     file_dialog.setViewMode(QtWidgets.QFileDialog.Detail)
+        #     nom_fichier_filtre = file_dialog.getSaveFileName(self)[0]
+        #     if not nom_fichier_filtre:
+        #         return
+        #         # t = datetime.now()
+        #         # nom_fichier_filtre = str(t.date())+"-"+str(t.time())[:-7]
+        #
+        # result = Api.write_to_disk(path=os.path.join(Api.ADRESS_DIR, nom_fichier_filtre), lst=lst_filtre)
         # result = True
+        # if result:
+        #     message_box = QtWidgets.QMessageBox()
+        #     message_box.setWindowTitle("Process")
+        #     message_box.setText(f"Le fichier {os.path.basename(nom_fichier_filtre)}"
+        #                         f" contenant {len(lst_filtre)} adresses a été créé dans le"
+        #                         f" dossier {Api.ADRESS_DIR}")
+        #     message_box.exec_()
+        return result
+
+    def save_result(self, liste):
+
+        file_dialog = QtWidgets.QFileDialog(self)
+        file_dialog.setViewMode(QtWidgets.QFileDialog.Detail)
+        nom_fichier_filtre = file_dialog.getSaveFileName(self)[0]
+        nom_dir = file_dialog.directory().path()
+        if not nom_fichier_filtre:
+            return
+            # t = datetime.now()
+            # nom_fichier_filtre = str(t.date())+"-"+str(t.time())[:-7]
+        # result = True
+        result = Api.write_to_disk(path=os.path.join(Api.RESULT_DIR, nom_fichier_filtre), lst=liste)
         if result:
             message_box = QtWidgets.QMessageBox()
             message_box.setWindowTitle("Process")
             message_box.setText(f"Le fichier {os.path.basename(nom_fichier_filtre)}"
-                                f" contenant {len(lst_filtre)} adresses a été créé dans le"
-                                f" dossier {Api.ADRESS_DIR}")
+                                f" contenant {len(liste)} adresses a été créé dans le"
+                                f" dossier {nom_dir}")
             message_box.exec_()
         return result
 
     def load_json(self, nom_lst, cb):
         if nom_lst:
             logging.debug(f"la liste {nom_lst} va être chargée")
+            self.layerV.lbl_2.hide()
+            self.layerV.lbl_3.hide()
+            self.layerV.lw_lst2.hide()
+            self.layerV.lw_lst3.hide()
+            self.layerV.lw_lst1.clear()
             if cb == "ref":
                 self.populate_ref(nom_liste=nom_lst)
                 self.le_adress_ref.repaint()
@@ -691,4 +808,7 @@ class MainWindow(QtWidgets.QWidget):
 
 
 if __name__ == '__main__':
-    print(os.curdir)
+    pass
+
+
+

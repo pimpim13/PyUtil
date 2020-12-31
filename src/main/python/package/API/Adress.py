@@ -15,7 +15,7 @@ logging.basicConfig(filename='test_log.log', level=niveau,
 path_appli = os.path.dirname(__file__)
 
 if not os.path.exists('setup.json'):
-    setup_file = {"ADRESS_DIR": 'adress', "FILE_NAME": 'lst_ref.json'}
+    setup_file = {"ADRESS_DIR": 'adress', "FILE_NAME": 'lst_ref.json', "RESULT_DIR": 'resultats'}
     with open('setup.json', 'w') as f:
         json.dump(setup_file, f, indent=4)
         logging.info('création du fichier de setup')
@@ -27,8 +27,10 @@ with open('setup.json', 'r') as f:
 
 if sys.platform == 'win32':
     ADRESS_DIR = f'D{os.path.join(Path.home(), setup_file["ADRESS_DIR"])[1:]}'
+    RESULT_DIR = f'D{os.path.join(Path.home(), setup_file["ADRESS_DIR"], setup_file["RESULT_DIR"])[1:]}'
 else:
     ADRESS_DIR = os.path.join(Path.home(), setup_file["ADRESS_DIR"])  # le dossier de travail est dans le dossier user
+    RESULT_DIR = os.path.join(Path.home(), setup_file["ADRESS_DIR"], setup_file["RESULT_DIR"])
 
 FILE_NAME = setup_file["FILE_NAME"]  # récupère le nom du fichier de données dans le fichier setup
 
@@ -50,8 +52,8 @@ def write_to_disk(path, lst):
     t = os.path.splitext(b)
     name = os.path.join(os.path.dirname(path), f'{t[0]}.txt')
 
-    if not os.path.exists(ADRESS_DIR):
-        os.makedirs(ADRESS_DIR)
+    if not os.path.exists(RESULT_DIR):
+        os.makedirs(RESULT_DIR)
 
     with open(name, 'w') as f:
         flag = False
@@ -162,6 +164,7 @@ def remove_list_from_json(nom):
         logging.info(f'la liste "{nom}" a été retirée au fichier {FILE_NAME}')
 
     return True
+
 
 if __name__ == '__main__':
     # test_json = {"toto": [1,2,3], "bibi": [4, 5, 6]}
