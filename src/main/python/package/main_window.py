@@ -27,9 +27,10 @@ class Window(QtWidgets.QMainWindow):
             with open(css_file, 'r') as f:
                 self.setStyleSheet(f.read())
 
-        lst_json = Api.get_lst_of_json(Api.ADRESS_DIR)
+        # lst_json = Api.get_lst_of_json(Api.ADRESS_DIR)
         self.w1 = MainWindow()
         self.setCentralWidget(self.w1)
+        self.appli = self.w1
 
         self.toolbar_A = self.addToolBar("Liste A")
 
@@ -55,6 +56,8 @@ class Window(QtWidgets.QMainWindow):
         self._savebuttonA.setText("Save A")
         self._savebuttonA.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
         self._savebuttonA.clicked.connect(self.save_list_A)
+        self._savebuttonA.setToolTip("Sauvegarde la liste <b>A</b>")
+
         self.toolbar_A.addWidget(self._savebuttonA)
 
         self._delbuttonA = QToolButton()
@@ -133,6 +136,7 @@ class Window(QtWidgets.QMainWindow):
         self._savebuttonB.setText("Save B")
         self._savebuttonB.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
         self._savebuttonB.clicked.connect(self.save_list_B)
+        self._savebuttonB.setToolTip("Sauvegarde la liste <b>B</b>")
         self.toolbar_A.addWidget(self._savebuttonB)
 
         self._openbuttonB = QToolButton()
@@ -162,9 +166,13 @@ class Window(QtWidgets.QMainWindow):
         self.appli.load_json(self.appli.cb_import_json_exclusion.currentText(), 'excl')
 
     def save_list_A(self):
-        pass
+        lst = Api.get_lst_from_json(nom_liste='last_ref')
+        self.appli.save_result(lst)
 
     def save_list_B(self):
+        lst = Api.get_lst_from_json(nom_liste='last_exclusion')
+        self.appli.save_result(lst)
+
         pass
 
     def del_list_A(self):
@@ -193,8 +201,10 @@ class Layer3V(QtWidgets.QWidget):
         self.lbl_1 = QtWidgets.QLabel("Liste 1")
         self.lbl_2 = QtWidgets.QLabel("Liste 2")
         self.lbl_3 = QtWidgets.QLabel("Liste 3")
+        self.lbl_result_count = QtWidgets.QLabel("0")
         self.layout3v.addWidget(self.lbl_1)
         self.layout3v.addWidget(self.lw_lst1)
+        self.layout3v.addWidget(self.lbl_result_count)
         self.layout3v.addWidget(self.lbl_2)
         self.layout3v.addWidget(self.lw_lst2)
         self.layout3v.addWidget(self.lbl_3)
@@ -326,6 +336,12 @@ class MainWindow(QtWidgets.QWidget):
         self.lbl_exclusion_count.setText("0")
         self.lbl_exclusion_count.setFont(font)
 
+        self.layerV.lbl_result_count.setAlignment(QtCore.Qt.AlignCenter)
+        self.layerV.lbl_result_count.setStyleSheet("background-color: rgb(162,200,255);")
+        self.layerV.lbl_result_count.setFrameShape(QtWidgets.QFrame.Box)
+        self.layerV.lbl_result_count.setText("0")
+        self.layerV.lbl_result_count.setFont(font)
+
         self.layerV.lbl_2.hide()
         self.layerV.lw_lst2.hide()
         self.layerV.lbl_3.hide()
@@ -349,7 +365,6 @@ class MainWindow(QtWidgets.QWidget):
         self.layout_resultats = QtWidgets.QVBoxLayout()
         self.layout_principal.addLayout(self.main_layout)
         self.layout_principal.addLayout(self.layout_resultats)
-
 
     def add_widgets_to_layouts(self):
         self.main_layout.addWidget(self.btn_open_ref, 0, 0, 1, 2)
@@ -592,6 +607,11 @@ class MainWindow(QtWidgets.QWidget):
 
     def generate_list(self, func):
 
+        self.layerV.lw_lst1.clear()
+        self.layerV.lw_lst2.clear()
+        self.layerV.lw_lst3.clear()
+        self.layerV.lbl_result_count.setText("0")
+
         boite = QtWidgets.QMessageBox.question(self, 'Sauvegarde', 'Liste à réutiliser ?')
         if boite == QtWidgets.QMessageBox.StandardButton.Yes:
             text, ok = QtWidgets.QInputDialog.getText(self, 'Nom de liste', 'Donnez un nom à cette liste')
@@ -632,13 +652,18 @@ class MainWindow(QtWidgets.QWidget):
 
         self.layerV.lbl_1.setText("Resultats")
         self.layerV.lw_lst1.addItems(lst_filtre)
+        self.layerV.lbl_result_count.setText(str(len(lst_filtre)))
 
         if nom_liste:
             Api.add_list_to_json(lst_filtre, nom=nom_liste)
             logging.info(f"la liste {nom_liste} a été rajouté au fichier JSON")
             self.populate_cb_json()
 
-        result = self.save_result(lst_filtre)
+        boite = QtWidgets.QMessageBox.question(self, 'Sauvegarde', 'Sauvegarder ?')
+        if boite == QtWidgets.QMessageBox.StandardButton.Yes:
+            result = self.save_result(lst_filtre)
+        else:
+            result = False
 
         # if self.fichier_ref:
         #     nom_fichier_filtre = f"{os.path.splitext(self.fichier_ref)[0]}" \
@@ -667,6 +692,7 @@ class MainWindow(QtWidgets.QWidget):
 
         file_dialog = QtWidgets.QFileDialog(self)
         file_dialog.setViewMode(QtWidgets.QFileDialog.Detail)
+
         nom_fichier_filtre = file_dialog.getSaveFileName(self)[0]
         nom_dir = file_dialog.directory().path()
         if not nom_fichier_filtre:
@@ -692,6 +718,8 @@ class MainWindow(QtWidgets.QWidget):
             self.layerV.lw_lst2.hide()
             self.layerV.lw_lst3.hide()
             self.layerV.lw_lst1.clear()
+            self.layerV.lbl_result_count.setText("0")
+
             if cb == "ref":
                 self.populate_ref(nom_liste=nom_lst)
                 self.le_adress_ref.repaint()

@@ -20,7 +20,7 @@ if not os.path.exists('setup.json'):
         json.dump(setup_file, f, indent=4)
         logging.info('création du fichier de setup')
 
-    logging.debug("le fichier de conf a été créé")
+    logging.debug("le fichier de setup a été créé")
 
 with open('setup.json', 'r') as f:
     setup_file = json.load(f)
@@ -33,6 +33,15 @@ else:
     RESULT_DIR = os.path.join(Path.home(), setup_file["ADRESS_DIR"], setup_file["RESULT_DIR"])
 
 FILE_NAME = setup_file["FILE_NAME"]  # récupère le nom du fichier de données dans le fichier setup
+
+path = os.path.join(ADRESS_DIR, FILE_NAME)
+
+if not os.path.exists(path):
+    logging.error(f"Le fichier {path} n'existe pas ")
+    init = {"last_ref": [], "last_exclusion": []}
+    with open(path, 'w') as f:
+        json.dump(init, f, indent=4)
+    logging.info('création du fichier de données')
 
 
 def txt_to_lst(text=""):
