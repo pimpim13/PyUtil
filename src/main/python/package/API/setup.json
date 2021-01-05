@@ -1,4 +1,5 @@
 {
     "ADRESS_DIR": "adress",
-    "FILE_NAME": "lst_ref.json"
+    "FILE_NAME": "lst_ref.json",
+    "RESULT_DIR"
 }
