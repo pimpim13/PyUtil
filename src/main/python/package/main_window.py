@@ -309,6 +309,8 @@ class MainWindow(QtWidgets.QWidget):
         self.le_adress_exclusion.setEnabled(True)
         self.le_adress_ref.setEnabled(True)
 
+        self.pt_texte_brut.setPlaceholderText("Liste au format : NOM  Prenom <prenom.nom@rte-france.com>;")
+
         self.btn_generate_list.setFixedSize(50, 50)
         self.btn_add_list.setFixedSize(50, 50)
         self.btn_diff_list.setFixedSize(50, 50)
@@ -758,13 +760,13 @@ class MainWindow(QtWidgets.QWidget):
     def del_user(self):
         if self.lw_liste_ref.selectedItems():
             for item in self.lw_liste_ref.selectedItems():
-                print(item.text())
+                logging.info(f"l'entrée {item.text()} a été supprimée de la liste A")
                 self.lw_liste_ref.takeItem(self.lw_liste_ref.row(item))
                 self.lst_ref.remove(item.text())
                 Api.add_list_to_json(self.lst_ref, nom="last_ref")
                 self.populate_ref()
         else:
-            print("NOK")
+            logging.info("Aucune entrée sélectionnée")
 
     def dragEnterEvent(self, event):
         event.accept()
@@ -779,9 +781,14 @@ class MainWindow(QtWidgets.QWidget):
 
     def convert_text(self):
         txt = self.pt_texte_brut.toPlainText()
-        # texte_valide = re.search(r'([A-Z ]+[a-zA-Z]+ <.+@rte-france\.com>; )', txt)
-        texte_valide = re.search(r'.', txt)
+        texte_valide = re.search(r'([A-Z ]+[a-zA-Z]+ <.+@rte-france\.com>; )', txt)
+        # texte_valide = re.search(r'.', txt)
         if not texte_valide:
+            message_box = QtWidgets.QMessageBox()
+            message_box.setWindowTitle("Erreur")
+            message_box.setText(f"Le format importé est incorrect")
+            message_box.exec_()
+
             return
         # self.convert_to_list(texte_valide.group())
         self.convert_to_list(txt)
@@ -793,6 +800,10 @@ class MainWindow(QtWidgets.QWidget):
         txt = self.pt_texte_brut.toPlainText()
         texte_valide = re.search(r'([A-Z ]+[a-zA-Z]+ <.+@rte-france\.com>; )', txt)
         if not texte_valide:
+            message_box = QtWidgets.QMessageBox()
+            message_box.setWindowTitle("Erreur")
+            message_box.setText(f"Le format importé est incorrect")
+            message_box.exec_()
             return
         self.convert_txt_to_lst_exclusion(texte_valide.group())
         self.pt_texte_brut.clear()
