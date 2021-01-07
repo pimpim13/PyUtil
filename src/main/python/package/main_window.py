@@ -41,7 +41,7 @@ class Window(QtWidgets.QMainWindow):
         self._openbutton.setCheckable(False)
         self._openbutton.setChecked(False)
         self._openbutton.setAutoRaise(True)
-        self._openbutton.setIcon(QtGui.QIcon("../icons/arrowA.png"))
+        self._openbutton.setIcon(QtGui.QIcon("arrowA.png"))
         self._openbutton.setText("Open A")
         self._openbutton.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
         self._openbutton.clicked.connect(self.open_bar_A)
@@ -53,7 +53,7 @@ class Window(QtWidgets.QMainWindow):
         self._savebuttonA.setCheckable(False)
         self._savebuttonA.setChecked(False)
         self._savebuttonA.setAutoRaise(True)
-        self._savebuttonA.setIcon(QtGui.QIcon("../icons/disketteA.png"))
+        self._savebuttonA.setIcon(QtGui.QIcon("disketteA.png"))
         self._savebuttonA.setText("Save A")
         self._savebuttonA.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
         self._savebuttonA.clicked.connect(self.save_list_A)
@@ -65,7 +65,7 @@ class Window(QtWidgets.QMainWindow):
         self._delbuttonA.setCheckable(False)
         self._delbuttonA.setChecked(False)
         self._delbuttonA.setAutoRaise(True)
-        self._delbuttonA.setIcon(QtGui.QIcon("../icons/trashA.png"))
+        self._delbuttonA.setIcon(QtGui.QIcon("trashA.png"))
         self._delbuttonA.setText("Effacer A")
         self._delbuttonA.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
         self._delbuttonA.clicked.connect(self.del_list_A)
@@ -81,7 +81,7 @@ class Window(QtWidgets.QMainWindow):
         self._openJsonbuttonA.setCheckable(False)
         self._openJsonbuttonA.setChecked(False)
         self._openJsonbuttonA.setAutoRaise(True)
-        self._openJsonbuttonA.setIcon(QtGui.QIcon("../icons/JsonA.png"))
+        self._openJsonbuttonA.setIcon(QtGui.QIcon("JsonA.png"))
         self._openJsonbuttonA.setText("A")
         self._openJsonbuttonA.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
         self._openJsonbuttonA.clicked.connect(self.open_json_A)
@@ -91,7 +91,7 @@ class Window(QtWidgets.QMainWindow):
         self._delJsonbuttonA.setCheckable(False)
         self._delJsonbuttonA.setChecked(False)
         self._delJsonbuttonA.setAutoRaise(True)
-        self._delJsonbuttonA.setIcon(QtGui.QIcon("../icons/x-markA.png"))
+        self._delJsonbuttonA.setIcon(QtGui.QIcon("x-markA.png"))
         self._delJsonbuttonA.setText("Del Json A")
         self._delJsonbuttonA.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
         self._delJsonbuttonA.clicked.connect(self.del_json_A)
@@ -101,7 +101,7 @@ class Window(QtWidgets.QMainWindow):
         self._delJsonbuttonB.setCheckable(False)
         self._delJsonbuttonB.setChecked(False)
         self._delJsonbuttonB.setAutoRaise(True)
-        self._delJsonbuttonB.setIcon(QtGui.QIcon("../icons/x-markB.png"))
+        self._delJsonbuttonB.setIcon(QtGui.QIcon("x-markB.png"))
         self._delJsonbuttonB.setText("Del Json B")
         self._delJsonbuttonB.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
         self._delJsonbuttonB.clicked.connect(self.del_json_B)
@@ -111,7 +111,7 @@ class Window(QtWidgets.QMainWindow):
         self._openJsonbuttonB.setCheckable(False)
         self._openJsonbuttonB.setChecked(False)
         self._openJsonbuttonB.setAutoRaise(True)
-        self._openJsonbuttonB.setIcon(QtGui.QIcon("../icons/JsonB.png"))
+        self._openJsonbuttonB.setIcon(QtGui.QIcon("JsonB.png"))
         self._openJsonbuttonB.setText("B")
         self._openJsonbuttonB.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
         self._openJsonbuttonB.clicked.connect(self.open_json_B)
@@ -121,7 +121,7 @@ class Window(QtWidgets.QMainWindow):
         self._delbuttonB.setCheckable(False)
         self._delbuttonB.setChecked(False)
         self._delbuttonB.setAutoRaise(True)
-        self._delbuttonB.setIcon(QtGui.QIcon("../icons/trashB.png"))
+        self._delbuttonB.setIcon(QtGui.QIcon("trashB.png"))
         self._delbuttonB.setText("Effacer B")
         self._delbuttonB.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
         self._delbuttonB.clicked.connect(self.del_list_B)
@@ -133,7 +133,7 @@ class Window(QtWidgets.QMainWindow):
         self._savebuttonB.setCheckable(False)
         self._savebuttonB.setChecked(False)
         self._savebuttonB.setAutoRaise(True)
-        self._savebuttonB.setIcon(QtGui.QIcon("../icons/disketteB.png"))
+        self._savebuttonB.setIcon(QtGui.QIcon("disketteB.png"))
         self._savebuttonB.setText("Save B")
         self._savebuttonB.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
         self._savebuttonB.clicked.connect(self.save_list_B)
@@ -144,7 +144,7 @@ class Window(QtWidgets.QMainWindow):
         self._openbuttonB.setCheckable(False)
         self._openbuttonB.setChecked(False)
         self._openbuttonB.setAutoRaise(True)
-        self._openbuttonB.setIcon(QtGui.QIcon("../icons/ArrowB.png"))
+        self._openbuttonB.setIcon(QtGui.QIcon("ArrowB.png"))
         self._openbuttonB.setText("Open B")
         self._openbuttonB.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
         self._openbuttonB.clicked.connect(self.open_bar_B)
@@ -263,8 +263,8 @@ class MainWindow(QtWidgets.QWidget):
         self.cb_import_json_exclusion = QtWidgets.QComboBox()
         self.btn_load_json_ref = QtWidgets.QPushButton("Charger Json")
         self.btn_load_json_exclusion = QtWidgets.QPushButton("Charger Json")
-        self.btn_del_json_ref = QtWidgets.QPushButton(QtGui.QIcon("../icons/dust-bin.png"), "")
-        self.btn_del_json_exclusion = QtWidgets.QPushButton(QtGui.QIcon("../icons/dust-bin.png"), "")
+        self.btn_del_json_ref = QtWidgets.QPushButton(QtGui.QIcon("dust-bin.png"), "")
+        self.btn_del_json_exclusion = QtWidgets.QPushButton(QtGui.QIcon("dust-bin.png"), "")
         self.btn_convert_ref = QtWidgets.QPushButton("Sauvegarder")
         self.btn_convert_exclusion = QtWidgets.QPushButton("Sauvegarder")
         self.btn_text_ref = QtWidgets.QPushButton("Convertir texte")
@@ -279,9 +279,9 @@ class MainWindow(QtWidgets.QWidget):
         self.btn_generate_list = QtWidgets.QPushButton("A-B")
         self.btn_add_list = QtWidgets.QPushButton("A+B")
         self.btn_diff_list = QtWidgets.QPushButton("X")
-        self.btn_exclude = QtWidgets.QPushButton(QtGui.QIcon("../icons/next.png"), "")
-        self.btn_include = QtWidgets.QPushButton(QtGui.QIcon("../icons/back.png"), "")
-        self.btn_del_user = QtWidgets.QPushButton(QtGui.QIcon("../icons/user.png"), "")
+        self.btn_exclude = QtWidgets.QPushButton(QtGui.QIcon("next.png"), "")
+        self.btn_include = QtWidgets.QPushButton(QtGui.QIcon("back.png"), "")
+        self.btn_del_user = QtWidgets.QPushButton(QtGui.QIcon("user.png"), "")
         self.btn_clear_ref = QtWidgets.QPushButton("Effacer A")
         self.btn_clear_exclusion = QtWidgets.QPushButton("Effacer B")
 
@@ -668,27 +668,6 @@ class MainWindow(QtWidgets.QWidget):
         else:
             result = False
 
-        # if self.fichier_ref:
-        #     nom_fichier_filtre = f"{os.path.splitext(self.fichier_ref)[0]}" \
-        #                          f"_{func}{os.path.splitext(self.fichier_ref)[1]}"
-        # else:
-        #     file_dialog = QtWidgets.QFileDialog(self)
-        #     file_dialog.setViewMode(QtWidgets.QFileDialog.Detail)
-        #     nom_fichier_filtre = file_dialog.getSaveFileName(self)[0]
-        #     if not nom_fichier_filtre:
-        #         return
-        #         # t = datetime.now()
-        #         # nom_fichier_filtre = str(t.date())+"-"+str(t.time())[:-7]
-        #
-        # result = Api.write_to_disk(path=os.path.join(Api.ADRESS_DIR, nom_fichier_filtre), lst=lst_filtre)
-        # result = True
-        # if result:
-        #     message_box = QtWidgets.QMessageBox()
-        #     message_box.setWindowTitle("Process")
-        #     message_box.setText(f"Le fichier {os.path.basename(nom_fichier_filtre)}"
-        #                         f" contenant {len(lst_filtre)} adresses a été créé dans le"
-        #                         f" dossier {Api.ADRESS_DIR}")
-        #     message_box.exec_()
         return result
 
     def save_result(self, liste):
