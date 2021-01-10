@@ -20,7 +20,8 @@ if not os.path.exists('setup.json'):
         json.dump(setup_file, f, indent=4)
         logging.info('création du fichier de setup')
 
-    logging.debug("le fichier de setup a été créé")
+    if os.path.exists(setup_file):
+        logging.debug("le fichier de setup a été créé")
 
 with open('setup.json', 'r') as f:
     setup_file = json.load(f)
@@ -35,6 +36,17 @@ else:
 FILE_NAME = setup_file["FILE_NAME"]  # récupère le nom du fichier de données dans le fichier setup
 
 path = os.path.join(ADRESS_DIR, FILE_NAME)
+
+if not os.path.exists(ADRESS_DIR):
+    logging.info(f"Le dossier {ADRESS_DIR} n'existe pas")
+    logging.info((f"Création du dossier {ADRESS_DIR}"))
+    os.makedirs(ADRESS_DIR)
+    if os.path.exists(ADRESS_DIR):
+        logging.info(f"Le dossier {ADRESS_DIR} a été créé")
+    else:
+        logging.info(f"La création du dossier {ADRESS_DIR} a échoué")
+        exit()
+
 
 if not os.path.exists(path):
     logging.error(f"Le fichier {path} n'existe pas ")
@@ -61,8 +73,8 @@ def write_to_disk(path, lst):
     t = os.path.splitext(b)
     name = os.path.join(os.path.dirname(path), f'{t[0]}.txt')
 
-    if not os.path.exists(RESULT_DIR):
-        os.makedirs(RESULT_DIR)
+    # if not os.path.exists(RESULT_DIR):
+    #     os.makedirs(RESULT_DIR)
 
     with open(name, 'w') as f:
         flag = False
@@ -176,30 +188,7 @@ def remove_list_from_json(nom):
 
 
 if __name__ == '__main__':
-    # test_json = {"toto": [1,2,3], "bibi": [4, 5, 6]}
-    # with open("/Users/alainzypinoglou/adress/test_json.json",'w') as f:
-    #     json.dump(test_json, f,indent=4)
-    #
-    # with open("/Users/alainzypinoglou/adress/test_json.json",'r') as f:
-    #     all_list = f.read()
-    #     print(type(all_list))
-    #     print(all_list)
-    #     dictio = all_list.split()
-    #     print(dictio)
 
-    # import json
-
-    # dict = {"member #002": {"first name": "John", "last name": "Doe", "age": 34},
-    #         "member #003": {"first name": "Elijah", "last name": "Baley", "age": 27},
-    #         "member #001": {"first name": "Jane", "last name": "Doe", "age": 42}}
-
-    # with open('/Users/alainzypinoglou/adress/test_json.json', 'w') as fp:
-    #     json.dump(dict, fp, sort_keys=True, indent=4)
-    #
-    # with open("/Users/alainzypinoglou/adress/test_json.json", 'r') as f:
-    #     all_list = json.load(f)
-    #     print(type(all_list))
-    #     print(all_list)
     lst1 = ["toto", "bibi", "bibi", "zozor"]
     lst2 = ["tata", "baba", "toto", "bibi", "bibi"]
 
