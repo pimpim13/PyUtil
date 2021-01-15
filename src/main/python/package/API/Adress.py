@@ -20,7 +20,7 @@ if not os.path.exists('setup.json'):
         json.dump(setup_file, f, indent=4)
         logging.info('création du fichier de setup')
 
-    if os.path.exists(setup_file):
+    if os.path.exists('setup.json'):
         logging.debug("le fichier de setup a été créé")
 
 with open('setup.json', 'r') as f:
