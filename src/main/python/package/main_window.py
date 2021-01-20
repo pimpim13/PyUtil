@@ -74,15 +74,16 @@ class Window(QtWidgets.QMainWindow):
         self._delbuttonA.setToolTip("Efface la liste <b>A</b>")
         self.toolbar_A.addWidget(self._delbuttonA)
 
-        # self._openJsonbuttonA = QToolButton()
-        # self._openJsonbuttonA.setCheckable(False)
-        # self._openJsonbuttonA.setChecked(False)
-        # self._openJsonbuttonA.setAutoRaise(True)
-        # self._openJsonbuttonA.setIcon(QtGui.QIcon("datas/JsonA.png"))
-        # self._openJsonbuttonA.setText("A")
-        # self._openJsonbuttonA.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
-        # self._openJsonbuttonA.clicked.connect(self.open_json_A)
-        # self.toolbar_A.addWidget(self._openJsonbuttonA)
+        self._save_JsonbuttonA = QToolButton()
+        self._save_JsonbuttonA.setCheckable(False)
+        self._save_JsonbuttonA.setChecked(False)
+        self._save_JsonbuttonA.setAutoRaise(True)
+        self._save_JsonbuttonA.setIcon(QtGui.QIcon("datas/JsonA.png"))
+        self._save_JsonbuttonA.setText("Save Json A")
+        self._save_JsonbuttonA.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
+        self._save_JsonbuttonA.clicked.connect(self.save_json_A)
+        self._save_JsonbuttonA.setToolTip("Sauve la liste A au format JSON")
+        self.toolbar_A.addWidget(self._save_JsonbuttonA)
 
         self._delJsonbuttonA = QToolButton()
         self._delJsonbuttonA.setCheckable(False)
@@ -104,15 +105,16 @@ class Window(QtWidgets.QMainWindow):
         self._delJsonbuttonB.clicked.connect(self.del_json_B)
         self.toolbar_A.addWidget(self._delJsonbuttonB)
 
-        # self._openJsonbuttonB = QToolButton()
-        # self._openJsonbuttonB.setCheckable(False)
-        # self._openJsonbuttonB.setChecked(False)
-        # self._openJsonbuttonB.setAutoRaise(True)
-        # self._openJsonbuttonB.setIcon(QtGui.QIcon("datas/JsonB.png"))
-        # self._openJsonbuttonB.setText("B")
-        # self._openJsonbuttonB.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
-        # self._openJsonbuttonB.clicked.connect(self.open_json_B)
-        # self.toolbar_A.addWidget(self._openJsonbuttonB)
+        self._save_JsonbuttonB = QToolButton()
+        self._save_JsonbuttonB.setCheckable(False)
+        self._save_JsonbuttonB.setChecked(False)
+        self._save_JsonbuttonB.setAutoRaise(True)
+        self._save_JsonbuttonB.setIcon(QtGui.QIcon("datas/JsonB.png"))
+        self._save_JsonbuttonB.setText("Save Json B")
+        self._save_JsonbuttonB.setToolButtonStyle(QtCore.Qt.ToolButtonTextUnderIcon)
+        self._save_JsonbuttonB.clicked.connect(self.save_json_B)
+        self._save_JsonbuttonB.setToolTip("Sauve la liste B au format JSON")
+        self.toolbar_A.addWidget(self._save_JsonbuttonB)
 
         self._delbuttonB = QToolButton()
         self._delbuttonB.setCheckable(False)
@@ -153,13 +155,28 @@ class Window(QtWidgets.QMainWindow):
     def open_bar_B(self):
         self.appli.init_list_exclusion()
 
-    def open_json_A(self):
+    def save_json_A(self):
+        lst = Api.get_lst_from_json(nom_liste='last_ref')
+        text, ok = QtWidgets.QInputDialog.getText(self, 'Nom de liste', 'Donnez un nom à cette liste')
+        nom_liste = text
+        if nom_liste:
+            Api.add_list_to_json(lst, nom=nom_liste)
+            logging.info(f"la liste {nom_liste} a été rajouté au fichier JSON")
+            self.w1.populate_cb_json()
+
         # self._openJsonbuttonA.showMenu()
         # return
-        self.appli.load_json(self.appli.cb_import_json.currentText(), 'ref')
+        # self.appli.load_json(self.appli.cb_import_json.currentText(), 'ref')
 
-    def open_json_B(self):
-        self.appli.load_json(self.appli.cb_import_json_exclusion.currentText(), 'excl')
+    def save_json_B(self):
+        lst = Api.get_lst_from_json(nom_liste='last_exclusion')
+        text, ok = QtWidgets.QInputDialog.getText(self, 'Nom de liste', 'Donnez un nom à cette liste')
+        nom_liste = text
+        if nom_liste:
+            Api.add_list_to_json(lst, nom=nom_liste)
+            logging.info(f"la liste {nom_liste} a été rajouté au fichier JSON")
+            self.w1.populate_cb_json()
+        # self.appli.load_json(self.appli.cb_import_json_exclusion.currentText(), 'excl')
 
     def save_list_A(self):
         lst = Api.get_lst_from_json(nom_liste='last_ref')
@@ -196,9 +213,11 @@ class Layer3V(QtWidgets.QWidget):
         self.lbl_2 = QtWidgets.QLabel("Liste 2")
         self.lbl_3 = QtWidgets.QLabel("Liste 3")
         self.lbl_result_count = QtWidgets.QLabel("0")
+        self.btn_saveresult = QtWidgets.QPushButton("Enregistrer")
         self.layout3v.addWidget(self.lbl_1)
         self.layout3v.addWidget(self.lw_lst1)
         self.layout3v.addWidget(self.lbl_result_count)
+        self.layout3v.addWidget(self.btn_saveresult)
         self.layout3v.addWidget(self.lbl_2)
         self.layout3v.addWidget(self.lw_lst2)
         self.layout3v.addWidget(self.lbl_3)
@@ -423,14 +442,6 @@ class MainWindow(QtWidgets.QWidget):
         self.cb_import_json_exclusion.currentTextChanged.connect(
             lambda: self.load_json(self.cb_import_json_exclusion.currentText(), 'excl'))
 
-        # self.btn_load_json_ref.clicked.connect(lambda: self.load_json(self.cb_import_json.currentText(),
-        #                                                               'ref'))
-        # self.btn_load_json_exclusion.clicked.connect(lambda: self.load_json
-        # (self.cb_import_json_exclusion.currentText(),'excl'))
-
-        # self.btn_del_json_ref.clicked.connect(lambda: self.del_json(self.cb_import_json.currentText()))
-        # self.btn_del_json_exclusion.clicked.connect(lambda: self.del_json
-        # (self.cb_import_json_exclusion.currentText()))
         self.pt_texte_brut.textChanged.connect(self.enable_text)
         self.btn_text_ref.clicked.connect(self.convert_text)
         self.btn_text_exclusion.clicked.connect(self.convert_text_exclusion)
@@ -439,6 +450,8 @@ class MainWindow(QtWidgets.QWidget):
         self.btn_clear_ref.clicked.connect(lambda: self.clear_list("A"))
         self.btn_clear_exclusion.clicked.connect(lambda: self.clear_list("B"))
         self.btn_del_user.clicked.connect(self.del_user)
+
+        self.layerV.btn_saveresult.clicked.connect(lambda: self.save_result(self.lst_filtre))
 
     def populate_widgets(self):
         self.populate_ref()
@@ -555,14 +568,14 @@ class MainWindow(QtWidgets.QWidget):
         Api.save_json(lst=self.lst_exclusion, nom_fichier='last_exclusion')
         return
 
-    def save_ref_to_json(self):
-        if self.filename_ref:
-            Api.save_json(self.lst_ref, self.filename_ref)
-
-    def save_exclusion_to_json(self):
-        path = os.path.basename(self.filename_exclusion)[:-5]
-        # logging.info(path)
-        Api.save_json(self.lst_exclusion, path)
+    # def save_ref_to_json(self):
+    #     if self.filename_ref:
+    #         Api.save_json(self.lst_ref, self.filename_ref)
+    #
+    # def save_exclusion_to_json(self):
+    #     path = os.path.basename(self.filename_exclusion)[:-5]
+    #     # logging.info(path)
+    #     Api.save_json(self.lst_exclusion, path)
 
     def get_selected_item_ref(self):
         selected_items = self.lw_liste_ref.selectedItems()
@@ -638,6 +651,8 @@ class MainWindow(QtWidgets.QWidget):
         else:
             nom_liste = None
         self.layerV.show()
+        self.layerV.btn_saveresult.setEnabled(True)
+
         lst_filtre = []
         if func == "exclude":
             lst_filtre = Api.process(lst_origine=self.lst_ref, lst_exclusion=self.lst_exclusion)
@@ -671,6 +686,8 @@ class MainWindow(QtWidgets.QWidget):
         self.layerV.lbl_1.setText("Resultats")
         self.layerV.lw_lst1.addItems(lst_filtre)
         self.layerV.lbl_result_count.setText(str(len(lst_filtre)))
+
+        self.lst_filtre = lst_filtre
 
         if nom_liste:
             Api.add_list_to_json(lst_filtre, nom=nom_liste)
@@ -707,6 +724,7 @@ class MainWindow(QtWidgets.QWidget):
 
     def load_json(self, nom_lst, cb):
         if nom_lst:
+            self.layerV.btn_saveresult.setEnabled(False)
             logging.debug(f"la liste {nom_lst} va être chargée")
             self.stb.status_msg(f"la liste {nom_lst} va être chargée", 3000)
 
