@@ -1,14 +1,11 @@
 from PySide2 import QtWidgets, QtCore, QtGui
 from PySide2.QtWidgets import QToolButton, QStatusBar
 
-
 import package.API.Adress as Api
-# import main
 import os
 import re
 import logging
 import sys
-# from datetime import datetime
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -39,7 +36,6 @@ class Window(QtWidgets.QMainWindow):
 
         self.toolbar_A = self.addToolBar("Liste A")
 
-        # self.createStatusBar("Prépapation")
         self._openbutton = QToolButton()
         self._openbutton.setCheckable(False)
         self._openbutton.setChecked(False)
@@ -50,7 +46,6 @@ class Window(QtWidgets.QMainWindow):
         self._openbutton.clicked.connect(self.open_bar_A)
         self._openbutton.setToolTip("Importe une nouvelle liste <b>A</b>")
         self.toolbar_A.addWidget(self._openbutton)
-        # self._openbutton.setStyleSheet("color:red")
 
         self._savebuttonA = QToolButton()
         self._savebuttonA.setCheckable(False)
@@ -150,7 +145,7 @@ class Window(QtWidgets.QMainWindow):
         self.toolbar_A.addWidget(self._openbuttonB)
 
     def open_bar_A(self):
-        self.appli.init_list()
+        self.w1.init_list()
 
     def open_bar_B(self):
         self.appli.init_list_exclusion()
@@ -163,10 +158,6 @@ class Window(QtWidgets.QMainWindow):
             Api.add_list_to_json(lst, nom=nom_liste)
             logging.info(f"la liste {nom_liste} a été rajouté au fichier JSON")
             self.w1.populate_cb_json()
-
-        # self._openJsonbuttonA.showMenu()
-        # return
-        # self.appli.load_json(self.appli.cb_import_json.currentText(), 'ref')
 
     def save_json_B(self):
         lst = Api.get_lst_from_json(nom_liste='last_exclusion')
@@ -225,18 +216,6 @@ class Layer3V(QtWidgets.QWidget):
 
         self.setLayout(self.layout3v)
 
-#
-# class MonLayerP(QtWidgets.QWidget):
-#     def __init__(self, w1, w2):
-#         super().__init__()
-#         self.w1 = w1
-#         self.w2 = w2
-#         self.setup_ui()
-#
-#     def setup_ui(self):
-#         self.create_layouts()
-#         self.setLayout(self.main_layout)
-
     def create_layouts(self):
         self.main_layout = QtWidgets.QHBoxLayout()
         self.layout1 = QtWidgets.QVBoxLayout()
@@ -258,7 +237,6 @@ class StatBar(QtWidgets.QStatusBar):
 
 class MainWindow(QtWidgets.QWidget):
 
-    # def __init__(self, ctx):
     def __init__(self):
         super().__init__()
 
@@ -399,11 +377,6 @@ class MainWindow(QtWidgets.QWidget):
         self.main_layout.addWidget(self.btn_open_exclusion, 0, 3, 1, 2)
         self.main_layout.addWidget(self.cb_import_json, 1, 0, 1, 2)
         self.main_layout.addWidget(self.cb_import_json_exclusion, 1, 3, 1, 2)
-
-        # self.main_layout.addWidget(self.btn_load_json_ref, 2, 0, 1, 1)
-        # self.main_layout.addWidget(self.btn_del_json_ref, 2, 1, 1, 1)
-        # self.main_layout.addWidget(self.btn_del_json_exclusion, 2, 3, 1, 1)
-        # self.main_layout.addWidget(self.btn_load_json_exclusion, 2, 4, 1, 1)
 
         self.main_layout.addWidget(self.btn_text_ref, 3, 0, 1, 2)
         self.main_layout.addWidget(self.btn_text_exclusion, 3, 3, 1, 2)
